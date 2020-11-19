@@ -86,12 +86,17 @@
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
+    <IssueList></IssueList>
     </div>
 </template>
 
 <script>
+import IssueList from '@/views/IssueList'
 export default {
     name:'Search',
+    components:{
+      IssueList,
+    },
     data() {
     return {
       ruleForm: {
