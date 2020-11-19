@@ -4,26 +4,26 @@
         <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-row>
               <!-- 用户ID查询 -->
-              <el-col :span="7">
-                <el-form-item label="用户ID" prop="userId" style="width:400px">
+              <!-- <el-col :span="7"> -->
+                <el-form-item label="用户ID" prop="userId" style="width:400px;display:inline-block">
                     <el-input v-model="ruleForm.userId" autocomplete="off" maxlength="30" show-word-limit placeholder="请输入用户ID"></el-input>
                 </el-form-item>                
-              </el-col>
+              <!-- </el-col> -->
               <!-- 用户姓名查询 -->
-              <el-col :span="5">
-                <el-form-item label="用户姓名" prop="userName" style="width:400px">
+              <!-- <el-col :span="5"> -->
+                <el-form-item label="用户姓名" prop="userName" style="width:400px;display:inline-block">
                     <el-input v-model="ruleForm.userName" autocomplete="off" maxlength="30" show-word-limit placeholder="请输入用户姓名"></el-input>
                 </el-form-item>              
-              </el-col>
+              <!-- </el-col> -->
               <!-- 按钮组 -->
-              <el-col :span="7">
-                <el-form-item>
+              <!-- <el-col :span="7"> -->
+                <el-form-item style="display:inline-block">
                     <!-- 查询按钮 -->
                     <el-button type="success" icon="el-icon-search" @click="submitForm('ruleForm')">查询</el-button>
                     <!-- 重置按钮 -->
                     <el-button @click="resetForm('ruleForm')">清空</el-button>
                 </el-form-item>
-              </el-col>
+              <!-- </el-col> -->
             </el-row>
         </el-form>        
     </div>
@@ -111,6 +111,7 @@ export default {
 .ReportForm{
   margin: 20px 60px;
   margin-bottom: 20px;
+  width: 1200px;;
   // display: inline-block;
 }    
 </style>

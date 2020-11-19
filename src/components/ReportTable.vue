@@ -5,10 +5,8 @@
         ref="multipleTable"
         :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         tooltip-effect="dark"
-        style="width: 1320px"
         border
         stripe
-        height="500"
         @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
