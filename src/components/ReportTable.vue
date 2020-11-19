@@ -5,10 +5,10 @@
         ref="multipleTable"
         :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         tooltip-effect="dark"
-        style="width: 1315px"
+        style="width: 1320px"
         border
         stripe
-        height="520px"
+        height="500"
         @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
@@ -82,7 +82,7 @@ export default {
     data(){
         return{
             currentPage:1,  //初始页
-            pagesize:10,    //每页的长度
+            pagesize:20,    //每页的长度
             // userList:[],    //每页的数据
             multipleSelection: [],
         }        
@@ -119,15 +119,15 @@ export default {
 </script>
 <style lang="scss" scope>
 .ReportTable{
-  margin-bottom: 50px;
   background: #fff;
   display: inline-block;
 }
 #report-pagination{
-  position: fixed;    //固定分页栏到浏览器底部
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position: fixed;    //固定分页栏到浏览器底部
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+  margin: 20px auto;
   background-color: #fff;
 }    
 </style>
