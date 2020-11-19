@@ -207,9 +207,9 @@ export default {
     // 用户数据设置
     handle(data) {
       this.list = data.data;
-      this.name = this.list[2].name;
-      this.url = this.list[2].header_url;
-      this.role = this.list[2].role;
+      this.name = this.list[1].name;
+      this.url = this.list[1].header_url;
+      this.role = this.list[1].role;
     },
 
     //操作通知
