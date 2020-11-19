@@ -2,7 +2,6 @@
   <div class="AccountInquiry">
     <el-container class="home-containar">
       <div>
-
         <el-form ref="form" :model="form" label-width="80px">
           <div class="inputid">
             <el-form-item label="用户ID">
@@ -49,7 +48,8 @@
             ref="multipleTable"
             :data="tableData.slice((currentPage - 1) * PageSize,currentPage * PageSize)"
             tooltip-effect="dark"
-            style="width: 100%">
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
           <!-- @selection-change="handleSelectionChange" -->
             <!-- 表格内容 -->
             <el-table-column type="selection" width="60"> </el-table-column>
@@ -148,12 +148,16 @@ export default {
       multipleSelection: [],
       // 默认每页显示的条数（可修改）
       PageSize: 20,
-      show: [],
+      // show: [],
     };
   },
   
   methods: {
-    
+    //多选框取值
+    handleSelectionChange(val){
+      this.checkIds=val; 
+      console.log("选中",val);
+    },
     //清空用户输入的内容
     empty(){
       this.form.user_id=""
@@ -221,16 +225,7 @@ export default {
           this.totalCount = data.data.length;
           console.log(this.tableData);
           console.log(this.totalCount);
-          // for(let i=0;i<this.tableData.length;i++){
-          //   // console.log(this.tableData[i]);
-          //   if(this.tableData[i].identity=="经理"){
-          //     this.show[i]=false;
-          //     // document.getElementsByClassName("jingling")[i].style.display="none";
-          //   }
-          //   else{
-          //     this.show[i]=true;
-          //   }   
-          // }
+          
         })
         .catch((err) => {
           console.log("error...", err);

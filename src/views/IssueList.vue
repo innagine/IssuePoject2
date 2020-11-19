@@ -16,8 +16,9 @@
               "
               tooltip-effect="dark"
               style="width: 100%"
+              @selection-change="handleSelectionChange"
             >
-              <!-- @selection-change="handleSelectionChange" -->
+            <!-- :row-class-name="tableRowClassName" -->
               <!-- 表格内容 -->
               <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
@@ -143,6 +144,11 @@ export default {
   },
 
   methods: {
+    //多选框取值
+    handleSelectionChange(val){
+      this.checkIds=val; 
+      console.log("选中",val);
+    },
     //清空用户输入的内容
     empty() {
       this.form.user_id = "";
