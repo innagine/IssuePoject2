@@ -19,15 +19,14 @@
             >
               <!-- @selection-change="handleSelectionChange" -->
               <!-- 表格内容 -->
-              <el-table-column type="selection" width="60"> </el-table-column>
+              <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
               </el-table-column>
-              <el-table-column prop="issue_id" label="Issue ID" width="120">
+              <el-table-column prop="issue_id" label="Issue ID" >
               </el-table-column>
               <el-table-column
                 prop="create_man"
                 label="Issue 创建人"
-                width="120"
               >
               </el-table-column>
               <el-table-column
@@ -60,7 +59,7 @@
                 show-overflow-tooltip
               >
               </el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" width="150px">
                 <template slot-scope="scope">
                   <el-button
                     style="background-color: #f78989 !important"

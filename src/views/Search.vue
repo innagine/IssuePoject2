@@ -1,5 +1,5 @@
 <template>
-  <div class="CIcontent">
+    <div class="Search">
     <el-form
       :model="ruleForm"
       :rules="rules"
@@ -10,21 +10,19 @@
     >
       <el-row>
         <el-col :span="12"
-          ><el-form-item label="Issue题目" prop="name">
+          ><el-form-item label="Issue NO" prop="name">
             <el-input v-model="ruleForm.name"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
-          <el-form-item label="Issue No." prop="id">
-            <el-input v-model="ruleForm.id"></el-input> </el-form-item
-        ></el-col>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="12"
-          ><el-form-item label="指派人" prop="person">
+          ><el-form-item label="创建人" prop="person">
             <el-input v-model="ruleForm.person"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
-          <el-form-item label="影响版本" prop="version" :inline="true">
+          <el-form-item label="修改人" prop="version" :inline="true">
             <el-input v-model="ruleForm.version"></el-input> </el-form-item
         ></el-col>
       </el-row>
@@ -40,9 +38,20 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
+        <el-col class="line" :span="2" style=" text-align: center;">至</el-col>
+        <el-col :span="11">
+        <el-form-item prop="date1">
+            <el-date-picker
+              type="date"
+              placeholder="选择日期"
+              v-model="ruleForm.date1"
+              style="width: 100%"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
       </el-form-item>
       <el-form-item label="修改时间" required>
-        <el-col :span="11">
+               <el-col :span="11">
           <el-form-item prop="date1">
             <el-date-picker
               type="date"
@@ -52,10 +61,9 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-      </el-form-item>
-      <el-form-item label="完成时间" required>
+        <el-col class="line" :span="2" style=" text-align: center;">至</el-col>
         <el-col :span="11">
-          <el-form-item prop="date1">
+        <el-form-item prop="date1">
             <el-date-picker
               type="date"
               placeholder="选择日期"
@@ -65,31 +73,26 @@
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item label="步骤重现" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-      </el-form-item>
-      <el-form-item label="Issue等级" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="请选择Issue等级">
-          <el-option label="最高" value="highest"></el-option>
-          <el-option label="较高" value="hight"></el-option>
-          <el-option label="一般" value="normal"></el-option>
-          <el-option label="低" value="low"></el-option>
+      <el-form-item label="Issue状态" prop="region">
+        <el-select v-model="ruleForm.region" placeholder="请选择Issue状态">
+          <el-option label="待修改" value="highest"></el-option>
+          <el-option label="已完成" value="hight"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')"
-          >立即创建</el-button
+          >立即搜索</el-button
         >
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
-  </div>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "CreateIssue",
-  data() {
+    name:'Search',
+    data() {
     return {
       ruleForm: {
         name: "",
@@ -105,7 +108,6 @@ export default {
         desc: "",
       },
       rules: {
-        person:[ { required: true, message: "请输入ISSUE题目", trigger: "blur" },],
         name: [
           { required: true, message: "请输入ISSUE题目", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
@@ -159,12 +161,11 @@ export default {
       this.$refs[formName].resetFields();
     },
   },
-};
+}
 </script>
 
-
 <style>
-.CIcontent {
+.Search {
   height: 100%;
   width: 80%;
   margin: 50px auto;

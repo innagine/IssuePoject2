@@ -55,6 +55,8 @@ export default {
 
 <style>
     .Modify{
-        margin: 20px 20px;
+        margin: 30px 30px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        padding: 40px;
     }
 </style>

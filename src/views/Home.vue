@@ -13,7 +13,8 @@
       <el-menu-item index="2" @click="JudgeIssue" v-if="indexlisyt[0].index">issue创建</el-menu-item>
       <el-menu-item index="3" @click="JudgeChart" v-if="indexlisyt[1].index">issue报表</el-menu-item>
       <el-menu-item index="4" @click="JudgeUser" v-if="indexlisyt[2].index">账号管理</el-menu-item>
-      <el-menu-item index="5" class="prevent">
+      <el-menu-item index="5" @click="Search">高级检索</el-menu-item>
+      <el-menu-item index="6" class="prevent">
         <el-input
           v-model="input"
           placeholder="请输入搜索内容"
@@ -22,16 +23,14 @@
         <el-button size="small">搜索</el-button>
       </el-menu-item>
 
-      <el-menu-item index="6" style="float: right">
+      <el-menu-item index="7" style="float: right">
         <el-button size="small" @click="Login">注销</el-button>
       </el-menu-item>
-      <el-menu-item index="7" style="float: right">{{ name }}</el-menu-item>
-      <el-menu-item style="float: right">
-        <router-link to="/">
+      <el-menu-item index="8" style="float: right" @click="myInfo">{{ name }}</el-menu-item>
+      <el-menu-item index="9" style="float: right" @click="myInfo">
           <div>
             <el-avatar :src="url"></el-avatar>
           </div>
-        </router-link>
       </el-menu-item>
     </el-menu>
     <RotationChart v-if="show"></RotationChart>
@@ -39,6 +38,8 @@
     <CreateIssue v-if="showCreateIssue"></CreateIssue>
     <AccountInquiry v-if="showAccountInquiry"></AccountInquiry>
     <ReportIssue v-if="showReportIssue"></ReportIssue>
+    <MyInfo v-if="showMyInfo"></MyInfo>
+    <Search v-if="showSearch"></Search>
   </div>
 </template>
 
@@ -48,7 +49,9 @@ import RotationChart from "@/components/RotationChart.vue";
 import Choose from "@/components/Choose.vue";
 import CreateIssue from "@/views/CreateIssue.vue";
 import AccountInquiry from "@/views/AccountInquiry.vue";
-import ReportIssue from "@/views/ReportIssue.vue"
+import ReportIssue from "@/views/ReportIssue.vue";
+import MyInfo from "@/views/MyInfo.vue";
+import Search from "@/views/Search.vue";
 
 // 导入axios
 import axios from "axios";
@@ -61,6 +64,8 @@ export default {
     CreateIssue,
     AccountInquiry,
     ReportIssue,
+    MyInfo,
+    Search
     
   },
   data() {
@@ -79,6 +84,8 @@ export default {
       showCreateIssue: false,
       showAccountInquiry: false,
       showReportIssue:false,
+      showMyInfo:false,
+      showSearch:false,
     };
   },
 
@@ -122,22 +129,26 @@ export default {
       this.showCreateIssue = false;
       this.show = false;
       this.showReportIssue=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
     },
-
     // 创建ISSUE
     createIssue() {
       this.showCreateIssue = true;
       this.show = false;
       this.showReportIssue=false;
       this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
     },
-
     // 展示首页
     indexShow() {
       this.showCreateIssue = false;
       this.show = true;
       this.showAccountInquiry=false;
       this.showReportIssue=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
     },
     //查看ISSUE报表
     reportIssue(){
@@ -145,7 +156,28 @@ export default {
       this.show=false;
       this.showCreateIssue=false;
       this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
     },
+    //展示个人页面
+    myInfo(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=true;
+      this.showSearch=false;
+    },
+    //展示高级检索页面
+    Search(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=true;
+    },
+
 
     // 选择回传，子传父值，传回选择的事项
     FromSon(data) {
@@ -175,9 +207,9 @@ export default {
     // 用户数据设置
     handle(data) {
       this.list = data.data;
-      this.name = this.list[0].name;
-      this.url = this.list[0].header_url;
-      this.role = this.list[0].role;
+      this.name = this.list[2].name;
+      this.url = this.list[2].header_url;
+      this.role = this.list[2].role;
     },
 
     //操作通知

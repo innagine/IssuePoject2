@@ -34,9 +34,8 @@
                 type="primary"
                 icon="el-icon-search"
                 @click="onSubmit('from')"
-                >搜索</el-button
-              >
-              <el-button type="info" @click="empty" >清空</el-button>
+                >搜索</el-button>
+              <el-button type="info" @click="empty"  class="gap">清空</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -271,6 +270,9 @@ export default {
 </script>
 
 <style >
+  .gap{
+    margin: 0 40px !important; 
+  }
   .main{
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);   
   }
@@ -282,6 +284,7 @@ export default {
   .inputname,
   .search {
     display: inline-block;
+    margin-right:80px;
   }
 
   /* 头部样式 底部样式*/
