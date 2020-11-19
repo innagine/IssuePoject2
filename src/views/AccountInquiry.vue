@@ -87,10 +87,13 @@
                   size="mini"
                   type="danger"
                   @click="handleDelete(indexMethod(scope.$index), scope.row.user_id)"
+                  v-if='scope.row.status!=="注销"'
                   >注销</el-button>
-                <el-button
+                  
+                <el-button 
                   size="mini"
                   @click="handleEdit(indexMethod(scope.$index), scope.row)"
+                  v-if='(scope.row.identity!=="经理")&&(scope.row.status!=="注销")'
                   >经理</el-button
                 >
               </template>
@@ -146,6 +149,7 @@ export default {
       multipleSelection: [],
       // 默认每页显示的条数（可修改）
       PageSize: 20,
+      show: [],
     };
   },
   
@@ -216,9 +220,18 @@ export default {
           this.tableData = data.data;
           // 将数据的长度赋值给totalCount
           this.totalCount = data.data.length;
-          console.log(this.datableDatata);
+          console.log(this.tableData);
           console.log(this.totalCount);
-          
+          // for(let i=0;i<this.tableData.length;i++){
+          //   // console.log(this.tableData[i]);
+          //   if(this.tableData[i].identity=="经理"){
+          //     this.show[i]=false;
+          //     // document.getElementsByClassName("jingling")[i].style.display="none";
+          //   }
+          //   else{
+          //     this.show[i]=true;
+          //   }   
+          // }
         })
         .catch((err) => {
           console.log("error...", err);
