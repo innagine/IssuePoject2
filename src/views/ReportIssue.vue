@@ -47,7 +47,6 @@ export default {
     padding: 0;
     margin: 0;
     height: 100%;
-    background-image: linear-gradient(to right, #51a4db,#a8e4fa);
     text-align: center;
 }
 </style>
