@@ -38,6 +38,7 @@
     <Choose v-if="show" @son="FromSon"></Choose>
     <CreateIssue v-if="showCreateIssue"></CreateIssue>
     <AccountInquiry v-if="showAccountInquiry"></AccountInquiry>
+    <ReportIssue v-if="showReportIssue"></ReportIssue>
   </div>
 </template>
 
@@ -47,6 +48,7 @@ import RotationChart from "@/components/RotationChart.vue";
 import Choose from "@/components/Choose.vue";
 import CreateIssue from "@/views/CreateIssue.vue";
 import AccountInquiry from "@/views/AccountInquiry.vue";
+import ReportIssue from "@/views/ReportIssue.vue"
 
 // 导入axios
 import axios from "axios";
@@ -57,7 +59,8 @@ export default {
     RotationChart,
     Choose,
     CreateIssue,
-    AccountInquiry
+    AccountInquiry,
+    ReportIssue,
     
   },
   data() {
@@ -71,6 +74,7 @@ export default {
       show: true,
       showCreateIssue: false,
       showAccountInquiry: false,
+      showReportIssue:false,
     };
   },
 
@@ -111,18 +115,29 @@ export default {
       this.showAccountInquiry = true;
       this.showCreateIssue = false;
       this.show = false;
+      this.showReportIssue=false;
     },
 
     // 创建ISSUE
     createIssue() {
       this.showCreateIssue = true;
       this.show = false;
+      this.showReportIssue=false;
+      this.showAccountInquiry=true;
     },
 
     // 展示首页
     indexShow() {
       this.showCreateIssue = false;
       this.show = true;
+      this.showAccountInquiry=false;
+      this.showReportIssue=false;
+    },
+    //查看ISSUE报表
+    reportIssue(){
+      this.showReportIssue=true;
+      this.show=false;
+      this.showCreateIssue=false;
       this.showAccountInquiry=false;
     },
 
@@ -135,6 +150,7 @@ export default {
         this.JudgeIssue();
       }
       if (data == 2) {
+        this.reportIssue();
         this.activeIndex = "3";
         console.log(this.activeIndex);
         this.JudgeChart();
@@ -206,8 +222,9 @@ export default {
     //issue报表按钮权限设置
     JudgeChart() {
       // 如果是经理
-      if (this.judge() == 2) {
+      if (this.judge() != 2) {
         console.log("可以操作");
+        this.reportIssue();
       }
       // 不是经理
       else {
