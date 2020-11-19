@@ -9,10 +9,10 @@
       active-text-color="#409EFF"
       @select="selectMenu"
     >
-      <el-menu-item index="1" @click="indexShow">ISSUE首页</el-menu-item>
-      <el-menu-item index="2" @click="JudgeIssue">issue创建</el-menu-item>
-      <el-menu-item index="3" @click="JudgeChart">issue报表</el-menu-item>
-      <el-menu-item index="4" @click="JudgeUser">账号管理</el-menu-item>
+      <el-menu-item index="1" @click="indexShow" >ISSUE首页</el-menu-item>
+      <el-menu-item index="2" @click="JudgeIssue" v-if="indexlisyt[0].index">issue创建</el-menu-item>
+      <el-menu-item index="3" @click="JudgeChart" v-if="indexlisyt[1].index">issue报表</el-menu-item>
+      <el-menu-item index="4" @click="JudgeUser" v-if="indexlisyt[2].index">账号管理</el-menu-item>
       <el-menu-item index="5" class="prevent">
         <el-input
           v-model="input"
@@ -65,6 +65,10 @@ export default {
   },
   data() {
     return {
+      // 按钮显示
+      indexlisyt:[{index:false},{index:false},{index:false}],
+
+
       list: [],
       url: "",
       name: "",
@@ -89,6 +93,8 @@ export default {
         console.log("data..", data);
         //处理用户数据
         this.handle(data);
+        //判断用户
+        this.judge()
       })
       .catch((err) => {
         console.log("error...", err);
@@ -123,7 +129,7 @@ export default {
       this.showCreateIssue = true;
       this.show = false;
       this.showReportIssue=false;
-      this.showAccountInquiry=true;
+      this.showAccountInquiry=false;
     },
 
     // 展示首页
@@ -169,9 +175,9 @@ export default {
     // 用户数据设置
     handle(data) {
       this.list = data.data;
-      this.name = this.list[2].name;
-      this.url = this.list[2].header_url;
-      this.role = this.list[2].role;
+      this.name = this.list[0].name;
+      this.url = this.list[0].header_url;
+      this.role = this.list[0].role;
     },
 
     //操作通知
@@ -188,16 +194,19 @@ export default {
       // 如果是员工
       if (this.role == "staff") {
         console.log("这是员工");
+        this.indexlisyt[0].index=true;
         return 1;
       }
       // 如果是经理
       if (this.role == "manager") {
         console.log("这是经理");
+        this.indexlisyt[1].index=true;
         return 2;
       }
       // 如果是超级管理员
       if (this.role == "administrator") {
         console.log("这是管理员");
+        this.indexlisyt[2].index=true;
         return 3;
       } else return;
     },
@@ -222,7 +231,7 @@ export default {
     //issue报表按钮权限设置
     JudgeChart() {
       // 如果是经理
-      if (this.judge() != 2) {
+      if (this.judge() == 2) {
         console.log("可以操作");
         this.reportIssue();
       }
