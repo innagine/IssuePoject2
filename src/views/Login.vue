@@ -13,8 +13,8 @@
           v-model="password"
           show-password
         ></el-input>
-        <div class="btn" @click="Login">
-          <span ref="point" v-if="showpoint"></span>登陆
+        <div class="btn" @click="Login" v-loading.fullscreen.lock="fullscreenLoading" >
+          <span ref="point" v-if="showpoint" ></span>登陆
         </div>
         <div class="btn" @click="Register">
           <span ref="point" v-if="showpoint"></span>注册
@@ -27,7 +27,7 @@
 
 <script>
 // 导入axios
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "Login",
@@ -50,18 +50,19 @@ export default {
     // 登陆验证
     Login() {
       // 发送get请求，请求用户匹配
-      axios({
-        method: "get",
-        url: "/data/person.json",
-      })
-        .then((data) => {
-          console.log("data..", data);
-          this.list = data.data;
+      // axios({
+      //   method: "get",
+      //   url: "/data/person.json",
+      // })
+      //   .then((data) => {
+      //     console.log("data..", data);
+      //     this.list = data.data;
           
-        })
-        .catch((err) => {
-          console.log("error...", err);
-        });
+      //   })
+      //   .catch((err) => {
+      //     console.log("error...", err);
+      //   });
+      
 
       //转跳到主页
       this.$router.push({
