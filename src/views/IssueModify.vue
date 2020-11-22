@@ -8,12 +8,12 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="修改 Issue" prop="desc">
+        <el-form-item label="解决方案" prop="desc">
           <el-input type="textarea" rows=10 v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')"
-            >立即创建</el-button
+            >提交验证</el-button
           >
           <el-button @click="resetForm('ruleForm')">重置</el-button>
           <el-button @click="back()">返回</el-button>
@@ -52,8 +52,10 @@ export default {
     },
     //修改Issue
     submitForm(formName) {
+      console.log(formName);
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log();
           alert("submit!");
         } else {
           console.log("error submit!!");

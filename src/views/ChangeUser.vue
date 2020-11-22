@@ -53,6 +53,9 @@
 
 
 <script>
+// 导入axios
+import axios from "axios";
+
 //特殊字符检验
 export function checkSpecificKey(str, specialKey) {
   for (var i = 0; i < str.length; i++) {
@@ -123,6 +126,27 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      console.log("------------------"+this.userName)
+      axios({
+        method: "post",
+        url: "http://localhost:8999/updateUser",
+        data: {
+          userId:666,
+          userName:this.ruleForm.userName,
+          email:this.ruleForm.email,
+          pwd1:this.ruleForm.pass,
+          pwd2:this.ruleForm.checkPass,
+          }
+      })
+        .then((res) => {
+          console.log("data.._________", res.data);
+        })
+        .catch((err) => {
+          console.log("error...", err);
+        });
+
+
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");

@@ -151,7 +151,7 @@ export default {
       PageSize: 20,
       //查询数据
       FormJsons: {
-        userId: null,
+        userId: 0,
         userName: null,
         pageIndex: 1,
         pageSize: 20,
@@ -214,23 +214,23 @@ export default {
         this.userName = this.form.user_name;
       }
       // axios post请求
-      // axios({
-      //   method: "post",
-      //   url: "http://192.168.1.49:8999/searchUser",
-      //   data: this.FormJsons,
-      // })
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     this.tableData = res.data;
-      //     this.totalCount = res.data.total;
-      //   })
-      //   .catch((Error) => {
-      //     console.log(Error);
-      //   });
-      // //值置为空
-      // this.FormJsons.userId = null;
-      // this.FormJsons.userName = null;
-      // console.log("submit!");
+      axios({
+        method: "post",
+        url: "http://localhost:8999/searchIssue",
+        data: this.FormJsons,
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.tableData = res.data;
+          this.totalCount = res.data.total;
+        })
+        .catch((Error) => {
+          console.log(Error);
+        });
+      //值置为空
+      this.FormJsons.userId = null;
+      this.FormJsons.userName = null;
+      console.log("submit!");
     },
 
     getData() {
@@ -253,15 +253,17 @@ export default {
       //   });
 
       axios({
-        method: "get",
-        url: "/data/tabledate.json",
+        method: "post",
+        url: "http://localhost:8999/searchUser",
+        data: this.FormJsons,
       })
-        .then((data) => {
+        .then((...res) => {
+          console.log(res[0].data);
           // console.log(data);
           // 将数据赋值给tableData
-          this.tableData = data.data;
+          this.tableData = res[0].data.users;
           // 将数据的长度赋值给totalCount
-          this.totalCount = data.data.length;
+          this.totalCount = res[0].data.total;
           // console.log(this.tableData);
           console.log(this.totalCount);
         })
@@ -311,19 +313,22 @@ export default {
     //注销账号
     handleDelete(row) {
       console.log(row);
-      this.logout.status="注销";
-      this.logout.user_id=row.user_id;
-      this.logout.pageIndex=this.currentPage;    
+      console.log(row.userId);
+      
+
+      // this.logout.status="注销";
+      // this.logout.user_id=row.user_id;
+      // this.logout.pageIndex=this.currentPage;    
       
       axios({
         method: "post",
-        url: "/data/tabledate.json",
-        data: this.logout,
+        url: "http://localhost:8999/cancellationUser",
+        data: {userId:row.userId}
       })
         .then((res) => {
           console.log(res);
-          this.tableData = res.data;
-          this.totalCount = res.data.length;
+          // this.tableData = res.data;
+          // this.totalCount = res.data.length;
         })
         .catch((err) => {
           console.log(err);

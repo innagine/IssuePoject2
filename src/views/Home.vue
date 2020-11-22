@@ -54,7 +54,7 @@ import MyInfo from "@/views/MyInfo.vue";
 import Search from "@/views/Search.vue";
 
 // 导入axios
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "Home",
@@ -75,7 +75,7 @@ export default {
 
 
       list: [],
-      url: "",
+      url: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       name: "",
       role: "",
       input: "",
@@ -91,21 +91,35 @@ export default {
 
   //获取用户名
   created() {
-    // 发送get请求，请求用户匹配
-    axios({
-      method: "get",
-      url: "/data/person.json",
-    })
-      .then((data) => {
-        console.log("data..", data);
-        //处理用户数据
-        this.handle(data);
-        //判断用户
-        this.judge()
-      })
-      .catch((err) => {
-        console.log("error...", err);
-      });
+
+    // 获取传参
+    console.log(this.$route.query.user);
+    //处理用户数据
+    // var user=JSON.parse(this.$route.query.user)
+    this.handle(this.$route.query.user);
+    // this.role= user.iden
+    // this.name= user.name
+
+    //判断用户
+    this.judge()
+
+    // console.log("name"+this.name)
+    // console.log("role"+this.role)
+    // // 发送get请求，请求用户匹配
+    // axios({
+    //   method: "get",
+    //   url: "/data/person.json",
+    // })
+    //   .then((data) => {
+    //     console.log("data..", data);
+    //     //处理用户数据
+    //     this.handle(data);
+    //     //判断用户
+    //     this.judge()
+    //   })
+    //   .catch((err) => {
+    //     console.log("error...", err);
+    //   });
   },
 
   methods: {
@@ -205,11 +219,11 @@ export default {
     },
 
     // 用户数据设置
-    handle(data) {
-      this.list = data.data;
-      this.name = this.list[1].name;
-      this.url = this.list[1].header_url;
-      this.role = this.list[1].role;
+    handle(user) {
+      // this.list = data.data;
+      this.name = user.userName;
+      // this.url = this.list[2].header_url;
+      this.role = user.identity;
     },
 
     //操作通知
@@ -224,19 +238,19 @@ export default {
     // 用户操作权限判断
     judge() {
       // 如果是员工
-      if (this.role == "staff") {
-        console.log("这是员工");
+      if (this.role =="普通用户") {
+        console.log("普通用户");
         this.indexlisyt[0].index=true;
         return 1;
       }
       // 如果是经理
-      if (this.role == "manager") {
+      if (this.role =="经理") {
         console.log("这是经理");
         this.indexlisyt[1].index=true;
         return 2;
       }
       // 如果是超级管理员
-      if (this.role == "administrator") {
+      if (this.role =="超级Admin") {
         console.log("这是管理员");
         this.indexlisyt[2].index=true;
         return 3;

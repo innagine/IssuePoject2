@@ -13,7 +13,7 @@
           v-model="password"
           show-password
         ></el-input>
-        <div class="btn" @click="Login" v-loading.fullscreen.lock="fullscreenLoading" >
+        <div class="btn" @click="Login">
           <span ref="point" v-if="showpoint" ></span>登陆
         </div>
         <div class="btn" @click="Register">
@@ -27,7 +27,7 @@
 
 <script>
 // 导入axios
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Login",
@@ -38,6 +38,11 @@ export default {
       showpoint: false,
       account: "",
       password: "",
+
+      // user:{
+      //   userid:this.password,
+      //   password:this.password
+      // },
       formLabelAlign: {
         name: "",
         region: "",
@@ -50,27 +55,35 @@ export default {
     // 登陆验证
     Login() {
       // 发送get请求，请求用户匹配
-      // axios({
-      //   method: "get",
-      //   url: "/data/person.json",
-      // })
-      //   .then((data) => {
-      //     console.log("data..", data);
-      //     this.list = data.data;
-          
-      //   })
-      //   .catch((err) => {
-      //     console.log("error...", err);
-      //   });
+      axios({
+        method: "post",
+        url: "http://localhost:8999/login",
+        data: {userId:this.account,password:this.password}
+      })
+        .then((res) => {
+          console.log("data..", res.data);
+          console.log(typeof(res.data))
+          //转跳到主页
+          this.$router.push({
+          path: "/home",
+          query:{
+              user:res.data
+            }
+          });
+        })
+        .catch((err) => {
+          console.log("error...", err);
+        });
+
       
 
       //转跳到主页
-      this.$router.push({
-        path: "/home",
-        query:{
-          name:this.list[0]
-        }
-      });
+      // this.$router.push({
+      //   path: "/home",
+      //   query:{
+      //     name:this.list[0]
+      //   }
+      // });
     },
 
     //注册操作

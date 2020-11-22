@@ -248,7 +248,7 @@ export default {
       showMotify: false,
       //弹窗tagId: "",
       issue_name: "",
-      issue_id: "",
+      issue_id: 2,
       create_man: "",
       beta: "",
       create_date: "",
@@ -349,21 +349,34 @@ export default {
     //弹窗
     getTagDetail: function () {
       this.dialogTableVisible = true;
+      console.log("+++++++++++++++++++++"+this.issue_id)
       axios({
-        method: "get",
-        url: "/data/tabledate2.json",
+        method: "post",
+        url: "http://localhost:8999/searchIssue",
+        data:{
+          issueId:2,
+          status:null,
+          createMan:null,
+          updateMan:null,
+          createDate:null,
+          updateDate:null,
+          date2:null,
+          date4:null,
+          pageIndex:1,
+          pageSize:20  
+        }
       })
         .then((res) => {
-          console.log(res.data[0].issue_name);
-          this.issue_name = res.data[0].issue_name;
-          this.issue_id = res.data[0].issue_id;
-          this.create_man = res.data[0].create_man;
-          this.beta = res.data[0].beta;
-          this.create_date = res.data[0].create_date;
-          this.update_date = res.data[0].update_date;
-          this.final_date = res.data[0].final_date;
-          this.step = res.data[0].step;
-          this.level = res.data[0].level;
+          console.log(res.data.issue[0]);
+          this.issue_name = res.data.issue[0].issueName;
+          this.issue_id = res.data.issue[0].issueId;
+          this.create_man = res.data.issue[0].createDate;
+          this.beta = res.data.issue[0].beta;
+          this.create_date = res.data.issue[0].createDate;
+          this.update_date = res.data.issue[0].updateDate;
+          this.final_date = res.data.issue[0].finalDate;
+          this.step = res.data.issue[0].step;
+          this.level = res.data.issue[0].level;
         })
         .catch((err) => {
           console.log("error...", err);

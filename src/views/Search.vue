@@ -10,20 +10,20 @@
     >
       <el-row>
         <el-col :span="12"
-          ><el-form-item label="Issue NO" prop="name">
-            <el-input v-model="ruleForm.name"></el-input> </el-form-item
+          ><el-form-item label="Issue NO" prop="issueId">
+            <el-input v-model="ruleForm.issueId"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12"
-          ><el-form-item label="创建人" prop="person">
-            <el-input v-model="ruleForm.person"></el-input> </el-form-item
+          ><el-form-item label="创建人" prop="createMan">
+            <el-input v-model="ruleForm.createMan"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
-          <el-form-item label="修改人" prop="version" :inline="true">
-            <el-input v-model="ruleForm.version"></el-input> </el-form-item
+          <el-form-item label="修改人" prop="updateMan" :inline="true">
+            <el-input v-model="ruleForm.updateMan"></el-input> </el-form-item
         ></el-col>
       </el-row>
 
@@ -40,11 +40,11 @@
         </el-col>
         <el-col class="line" :span="2" style=" text-align: center;">至</el-col>
         <el-col :span="11">
-        <el-form-item prop="date1">
+        <el-form-item prop="date2">
             <el-date-picker
               type="date"
               placeholder="选择日期"
-              v-model="ruleForm.date1"
+              v-model="ruleForm.date2"
               style="width: 100%"
             ></el-date-picker>
           </el-form-item>
@@ -52,31 +52,32 @@
       </el-form-item>
       <el-form-item label="修改时间" required>
                <el-col :span="11">
-          <el-form-item prop="date1">
+          <el-form-item prop="date3">
             <el-date-picker
               type="date"
               placeholder="选择日期"
-              v-model="ruleForm.date1"
+              v-model="ruleForm.date3"
               style="width: 100%"
             ></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2" style=" text-align: center;">至</el-col>
         <el-col :span="11">
-        <el-form-item prop="date1">
+        <el-form-item prop="date4">
             <el-date-picker
               type="date"
               placeholder="选择日期"
-              v-model="ruleForm.date1"
+              v-model="ruleForm.date4"
               style="width: 100%"
             ></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item label="Issue状态" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="请选择Issue状态">
-          <el-option label="待修改" value="highest"></el-option>
-          <el-option label="已完成" value="hight"></el-option>
+      <el-form-item label="Issue状态" prop="status">
+        <el-select v-model="ruleForm.status" placeholder="请选择Issue状态">
+          <el-option label="待修改" value="待修改"></el-option>
+          <el-option label="已完成" value="已完成"></el-option>
+          <el-option label="待验证" value="已完成"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -92,6 +93,10 @@
 
 <script>
 import IssueList from '@/views/IssueList'
+// 导入axios
+import axios from "axios";
+
+
 export default {
     name:'Search',
     components:{
@@ -100,13 +105,14 @@ export default {
     data() {
     return {
       ruleForm: {
-        name: "",
-        id: "",
-        person: "",
-        version: "",
-        region: "",
+        iusseId:"",
+        createMan: null,
+        updateMan: null,
         date1: "",
         date2: "",
+        date3: "",
+        date4: "",
+        status:null,
         delivery: false,
         type: [],
         resource: "",
@@ -153,6 +159,35 @@ export default {
   },
   methods: {
     submitForm(formName) {
+
+            // 发送post请求
+          axios({
+        method: "post",
+        url: "http://localhost:8999/searchIssue",
+        data: {
+          issueId:this.ruleForm.issueId,
+          status:this.ruleForm.status,
+          createMan:this.ruleForm.createMan,
+          updateMan:this.ruleForm.updateMan,
+          createDate:this.ruleForm.date1,
+          updateDate:this.ruleForm.date3,
+          date2:this.ruleForm.date2,
+          date4:this.ruleForm.date4,
+          pageIndex:1,
+          pageSize:20        
+          }
+      })
+        .then((res) => {
+          console.log("data..", res.data);
+          console.log(typeof(res.data));
+        })
+        .catch((err) => {
+          console.log("error...", err);
+        });
+
+
+
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");

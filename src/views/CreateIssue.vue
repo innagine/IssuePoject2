@@ -14,8 +14,8 @@
             <el-input v-model="ruleForm.name"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
-          <el-form-item label="Issue No." prop="id">
-            <el-input v-model="ruleForm.id"></el-input> </el-form-item
+          <el-form-item label="Issue No." prop="id" >
+            <el-input v-model="ruleForm.id" :disabled="true"></el-input> </el-form-item
         ></el-col>
       </el-row>
       <el-row>
@@ -28,12 +28,19 @@
             <el-input v-model="ruleForm.version"></el-input> </el-form-item
         ></el-col>
       </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="ISSUE类型" prop="type2">
+            <el-input v-model="ruleForm.type2"></el-input> </el-form-item
+        ></el-col>
+      </el-row>
 
-      <el-form-item label="创建时间" required>
+      <el-form-item label="创建时间">
         <el-col :span="11">
           <el-form-item prop="date1">
             <el-date-picker
-              type="date"
+            :disabled="true"
+              type="date1"
               placeholder="选择日期"
               v-model="ruleForm.date1"
               style="width: 100%"
@@ -43,21 +50,22 @@
       </el-form-item>
       <el-form-item label="修改时间" required>
         <el-col :span="11">
-          <el-form-item prop="date1">
+          <el-form-item prop="date">
             <el-date-picker
               type="date"
               placeholder="选择日期"
-              v-model="ruleForm.date1"
+              v-model="ruleForm.date"
               style="width: 100%"
             ></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item label="完成时间" required>
+      <el-form-item label="完成时间">
         <el-col :span="11">
-          <el-form-item prop="date1">
+          <el-form-item prop="date3">
             <el-date-picker
-              type="date"
+            :disabled="true"
+              type="date3"
               placeholder="选择日期"
               v-model="ruleForm.date1"
               style="width: 100%"
@@ -68,12 +76,12 @@
       <el-form-item label="步骤重现" prop="desc">
         <el-input type="textarea" v-model="ruleForm.desc"></el-input>
       </el-form-item>
-      <el-form-item label="Issue等级" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="请选择Issue等级">
-          <el-option label="最高" value="highest"></el-option>
-          <el-option label="较高" value="hight"></el-option>
-          <el-option label="一般" value="normal"></el-option>
-          <el-option label="低" value="low"></el-option>
+      <el-form-item label="Issue等级" prop="grade">
+        <el-select v-model="ruleForm.grade" placeholder="请选择Issue等级">
+          <el-option label="最高" value="4"></el-option>
+          <el-option label="较高" value="3"></el-option>
+          <el-option label="一般" value="2"></el-option>
+          <el-option label="低" value="1"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -87,6 +95,9 @@
 </template>
 
 <script>
+// 导入axios
+import axios from "axios";
+
 export default {
   name: "CreateIssue",
   data() {
@@ -95,10 +106,13 @@ export default {
         name: "",
         id: "",
         person: "",
+        type2:'',
         version: "",
-        region: "",
-        date1: "",
+        grade: "",
+        date: "",
         date2: "",
+        date3: "",
+        solution:"",
         delivery: false,
         type: [],
         resource: "",
@@ -113,7 +127,7 @@ export default {
         region: [
           { required: true, message: "请填写步骤重现", trigger: "change" },
         ],
-        date1: [
+        date: [
           {
             type: "date",
             required: true,
@@ -121,14 +135,14 @@ export default {
             trigger: "change",
           },
         ],
-        date2: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择时间",
-            trigger: "change",
-          },
-        ],
+        // date2: [
+        //   {
+        //     type: "date",
+        //     required: true,
+        //     message: "请选择时间",
+        //     trigger: "change",
+        //   },
+        // ],
         type: [
           {
             type: "array",
@@ -145,7 +159,37 @@ export default {
     };
   },
   methods: {
+
     submitForm(formName) {
+
+      // 发送post请求
+          axios({
+        method: "post",
+        url: "http://localhost:8999/createIssue",
+        data: {
+          issueName:this.ruleForm.name,
+          createMan:"1",
+          level:this.ruleForm.grade,
+          type:this.ruleForm.type2,
+          beta:this.ruleForm.version,
+          userId:1,
+          updateMan:this.ruleForm.person,
+          step:this.ruleForm.desc,
+          solution:this.ruleForm.solution,
+          planDate:this.ruleForm.date
+        }
+      })
+        .then((res) => {
+          console.log("data..", res.data);
+        })
+        .catch((err) => {
+          console.log("error...", err);
+        });
+
+
+
+
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");
