@@ -18,17 +18,14 @@
               style="width: 100%"
               @selection-change="handleSelectionChange"
             >
-            <!-- :row-class-name="tableRowClassName" -->
+              <!-- :row-class-name="tableRowClassName" -->
               <!-- 表格内容 -->
               <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
               </el-table-column>
-              <el-table-column prop="issue_id" label="Issue ID" >
+              <el-table-column prop="issue_id" label="Issue ID">
               </el-table-column>
-              <el-table-column
-                prop="create_man"
-                label="Issue 创建人"
-              >
+              <el-table-column prop="create_man" label="Issue 创建人">
               </el-table-column>
               <el-table-column
                 prop="create_date"
@@ -70,10 +67,119 @@
                       handleDelete(
                         indexMethod(scope.$index),
                         scope.row.issue_id
-                      )
+                      ),
+                        getTagDetail()
                     "
                     >详情</el-button
                   >
+                  <!-- 弹窗内容 -->
+                  <el-dialog
+                    title="ISSUE详情"
+                    :visible.sync="dialogTableVisible"
+                  >
+                    <div class="Detail">
+                      <el-form
+                        ref="ruleForm"
+                        label-width="100px"
+                        class="demo-ruleForm"
+                        style="align-self: center"
+                      >
+                        <el-row>
+                          <el-col :span="12"
+                            ><el-form-item label="Issue题目">
+                              <el-input readonly v-model="issue_name">{{
+                                issue_name
+                              }}</el-input>
+                            </el-form-item>
+                          </el-col>
+
+                          <el-col :span="11">
+                            <el-form-item label="Issue No.">
+                              <el-input readonly v-model="issue_id">{{
+                                issue_id
+                              }}</el-input>
+                            </el-form-item></el-col
+                          >
+                        </el-row>
+                        <el-row>
+                          <el-col :span="12"
+                            ><el-form-item label="指派人">
+                              <el-input readonly v-model="create_man">{{
+                                create_man
+                              }}</el-input></el-form-item
+                            ></el-col
+                          >
+                          <el-col :span="11">
+                            <el-form-item
+                              label="影响版本"
+                              prop="version"
+                              :inline="true"
+                            >
+                              <el-input readonly v-model="beta">{{
+                                beta
+                              }}</el-input>
+                            </el-form-item></el-col
+                          >
+                        </el-row>
+
+                        <el-form-item label="创建时间">
+                          <el-col :span="11">
+                            <el-form-item>
+                              <el-date-picker
+                                type="date"
+                                style="width: 100%"
+                                readonly
+                                v-model="create_date"
+                                >{{ create_date }}</el-date-picker
+                              >
+                            </el-form-item>
+                          </el-col>
+                        </el-form-item>
+                        <el-form-item label="修改时间">
+                          <el-col :span="11">
+                            <el-form-item>
+                              <el-date-picker
+                                type="date"
+                                readonly
+                                style="width: 100%"
+                                v-model="update_date"
+                                >{{ update_date }}</el-date-picker
+                              >
+                            </el-form-item>
+                          </el-col>
+                        </el-form-item>
+                        <el-form-item label="完成时间">
+                          <el-col :span="11">
+                            <el-form-item>
+                              <el-date-picker
+                                type="date"
+                                readonly
+                                v-model="final_date"
+                                style="width: 100%"
+                                >{{ final_date }}</el-date-picker
+                              >
+                            </el-form-item>
+                          </el-col>
+                        </el-form-item>
+                        <el-form-item label="步骤重现">
+                          <el-input
+                            type="textarea"
+                            autosize
+                            readonly
+                            v-model="step"
+                            >{{ step }}</el-input
+                          >
+                        </el-form-item>
+                        <el-form-item label="Issue等级">
+                          <el-col :span="11">
+                            <el-input readonly v-model="level">{{
+                              level
+                            }}</el-input>
+                          </el-col>
+                        </el-form-item>
+                      </el-form>
+                    </div>
+                  </el-dialog>
                   <el-button
                     size="mini"
                     @click="
@@ -114,7 +220,7 @@ import IssueModify from "@/views/IssueModify.vue";
 
 //表格
 export default {
-  name: "IssueList",
+  name: "issuelist",
   components: {
     IssueModify,
   },
@@ -140,14 +246,27 @@ export default {
       PageSize: 20,
       showIssueList: true,
       showMotify: false,
+      //弹窗tagId: "",
+      issue_name: "",
+      issue_id: "",
+      create_man: "",
+      beta: "",
+      create_date: "",
+      update_date: "",
+      final_date: "",
+      step:"",
+      level: "",
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      formLabelWidth: "120px",
     };
   },
 
   methods: {
     //多选框取值
-    handleSelectionChange(val){
-      this.checkIds=val; 
-      console.log("选中",val);
+    handleSelectionChange(val) {
+      this.checkIds = val;
+      console.log("选中", val);
     },
     //清空用户输入的内容
     empty() {
@@ -159,24 +278,24 @@ export default {
       return (this.currentPage - 1) * this.PageSize + index + 1;
     },
     //查询提交
-    onSubmit() {
-      /* json格式提交： */
-      let formData = JSON.stringify(this.form);
-      axios({
-        method: "post",
-        url: "xxxxxxx",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-        data: formData,
-      }).then((res) => {
-        this.tableData = res.data;
-        console.log(res);
-      });
-      console.log("submit!");
-      console.log(this.form);
-    },
+    // onSubmit() {
+    //   /* json格式提交： */
+    //   let formData = JSON.stringify(this.form);
+    //   axios({
+    //     method: "post",
+    //     url: "xxxxxxx",
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //     withCredentials: true,
+    //     data: formData,
+    //   }).then((res) => {
+    //     this.tableData = res.data;
+    //     console.log(res);
+    //   });
+    //   console.log("submit!");
+    //   console.log(this.form);
+    // },
 
     getData() {
       axios({
@@ -184,13 +303,13 @@ export default {
         url: "/data/tabledate.json",
       })
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           // 将数据赋值给tableData
           this.tableData = data.data;
           // 将数据的长度赋值给totalCount
           this.totalCount = data.data.length;
-          console.log(this.tableData);
-          console.log(this.totalCount);
+          // console.log(this.tableData);
+          // console.log(this.totalCount);
         })
         .catch((err) => {
           console.log("error...", err);
@@ -223,9 +342,52 @@ export default {
       this.modify();
       console.log(index, row);
     },
-    //取详情按钮的数据
-    handleDelete(index, row) {
-      console.log(index, row);
+    //取详情按钮的数据index, row
+    handleDelete() {
+      // console.log(index, row);
+    },
+    //弹窗
+    getTagDetail: function () {
+      this.dialogTableVisible = true;
+      axios({
+        method: "get",
+        url: "/data/tabledate2.json",
+      })
+        .then((res) => {
+          console.log(res.data[0].issue_name);
+          this.issue_name = res.data[0].issue_name;
+          this.issue_id = res.data[0].issue_id;
+          this.create_man = res.data[0].create_man;
+          this.beta = res.data[0].beta;
+          this.create_date = res.data[0].create_date;
+          this.update_date = res.data[0].update_date;
+          this.final_date = res.data[0].final_date;
+          this.step = res.data[0].step;
+          this.level = res.data[0].level;
+        })
+        .catch((err) => {
+          console.log("error...", err);
+        });
+
+      // eslint-disable-next-line no-undef
+      // this.dialogTableVisible = true;
+      // this.$axios({
+      //   method: "post",
+      //   url: "/data/tabledate2.json",
+      //   data: {
+      //     data: {
+      //       tagId: this.tagId,
+      //     },
+      //   },
+      // }).then((response) => {
+      //   console.log(response.data.data);
+      //   this.tagId = response.data.data.tagId;
+      //   // console.log(this.tagId)
+      //   this.gridData[0].tagId = this.tagId;
+      //   this.tag = response.data.data.tag; // 第一种方法
+      //   this.gridData[0].tag = this.tag;
+      //   // 第二种方法. this.gridData[0].tag= response.data.data.dataSchema
+      // });
     },
   },
   created: function () {
@@ -264,5 +426,34 @@ export default {
 
 .el-pagination {
   text-align: center;
+}
+
+/* 弹窗的样式 */
+.el-row {
+  margin-bottom: 20px;
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #99a9bf;
+}
+.bg-purple {
+  background: #d3dce6;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+
+.text {
+  line-height: 23px;
 }
 </style>
