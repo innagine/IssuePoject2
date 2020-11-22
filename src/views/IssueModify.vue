@@ -1,6 +1,6 @@
 <template>
   <div class="IssueModify">
-    <div class="Modify">
+    <div class="Modify" v-if="showMotify">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -16,17 +16,26 @@
             >立即创建</el-button
           >
           <el-button @click="resetForm('ruleForm')">重置</el-button>
-          <el-button @click="resetForm('ruleForm')">返回</el-button>
+          <el-button @click="back()">返回</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <IssueList v-if="showIssueList"></IssueList>
   </div>
 </template>
 
 <script>
+import IssueList from "@/views/IssueList.vue";
+
 export default {
+  name: "issuemodify",
+  components: {
+    IssueList,
+  },
   data() {
     return {
+      showIssueList:false,
+      showMotify:true,
       ruleForm: {
         desc: "",
       },
@@ -36,6 +45,12 @@ export default {
     };
   },
   methods: {
+    back() {
+      console.log(1111);
+      this.showIssueList = true;
+      this.showMotify = false;
+    },
+    //修改Issue
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -46,6 +61,7 @@ export default {
         }
       });
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
