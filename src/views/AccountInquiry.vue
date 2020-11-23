@@ -233,7 +233,7 @@ export default {
       console.log("submit!");
     },
 
-    getData() {
+    getData(n) {
       // 这里使用axios，使用时请提前引入
       // this.Paging.userId=this.userId;
       // this.Paging.userName=this.userName;
@@ -265,7 +265,8 @@ export default {
           // 将数据的长度赋值给totalCount
           this.totalCount = res[0].data.total;
           // console.log(this.tableData);
-          console.log(this.totalCount);
+          this.currentPage=n;
+          // console.log(this.totalCount);
         })
         .catch((err) => {
           console.log("error...", err);
@@ -291,30 +292,42 @@ export default {
 
     //修改员工身份数据
     handleEdit(row) {
-      this.manager.identity="经理";
-      this.manager.user_id=row.user_id;
-      this.manager.pageIndex=this.currentPage;    
-      
+      // this.manager.identity="经理";
+      // this.manager.user_id=row.user_id;
+      // this.manager.pageIndex=this.currentPage;
       axios({
         method: "post",
-        url: "/data/tabledate.json",
-        data: this.manager,
+        url: "http://localhost:8999/UpdateAuthority",
+        data: {userId:row.userId}
       })
         .then((res) => {
           console.log(res);
-          this.tableData = res.data;
-          this.totalCount = res.data.length;
+          // this.tableData = res.data;
+          // this.totalCount = res.data.length;
+           this.getData(this.currentPage);
         })
         .catch((err) => {
           console.log(err);
         });
+      // axios({
+      //   method: "post",
+      //   url: "/data/tabledate.json",
+      //   data: this.manager,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     this.tableData = res.data;
+      //     this.totalCount = res.data.length;
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
 
     //注销账号
     handleDelete(row) {
-      console.log(row);
-      console.log(row.userId);
-      
+      // console.log(row);
+      // console.log(row.userId);
 
       // this.logout.status="注销";
       // this.logout.user_id=row.user_id;
@@ -329,10 +342,12 @@ export default {
           console.log(res);
           // this.tableData = res.data;
           // this.totalCount = res.data.length;
+          this.getData(this.currentPage);
         })
         .catch((err) => {
           console.log(err);
         });
+        
     },
   },
   created: function () {

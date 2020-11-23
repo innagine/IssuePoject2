@@ -1,5 +1,7 @@
 <template>
     <div class="Search">
+    <el-collapse-transition>
+    <div v-show="show3">
     <el-form
       :model="ruleForm"
       :rules="rules"
@@ -85,8 +87,12 @@
           >立即搜索</el-button
         >
         <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <el-button @click="show3 = !show3" >收起</el-button>
       </el-form-item>
     </el-form>
+    </div>
+    </el-collapse-transition>
+     <el-button @click="show3 = !show3" v-if="!show3"  style="margin: 0 20px">收起</el-button>
     <IssueList></IssueList>
     </div>
 </template>
@@ -104,6 +110,7 @@ export default {
     },
     data() {
     return {
+      show3: true,
       ruleForm: {
         iusseId:"",
         createMan: null,
@@ -209,5 +216,6 @@ export default {
   height: 100%;
   width: 80%;
   margin: 50px auto;
+  
 }
 </style>

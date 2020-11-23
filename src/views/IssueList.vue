@@ -23,18 +23,18 @@
               <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
               </el-table-column>
-              <el-table-column prop="issue_id" label="Issue ID">
+              <el-table-column prop="issueId" label="Issue ID">
               </el-table-column>
-              <el-table-column prop="create_man" label="Issue 创建人">
+              <el-table-column prop="createMan" label="Issue 创建人">
               </el-table-column>
               <el-table-column
-                prop="create_date"
+                prop="createDate"
                 label="创建时间"
                 show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
-                prop="update_man"
+                prop="updateMan"
                 label="修改人"
                 show-overflow-tooltip
               >
@@ -46,13 +46,13 @@
               >
               </el-table-column>
               <el-table-column
-                prop="plan_date"
+                prop="planDate"
                 label="预计完成时间"
                 show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
-                prop="final_date"
+                prop="finalDate"
                 label="实际完成时间"
                 show-overflow-tooltip
               >
@@ -65,14 +65,15 @@
                     type="danger"
                     @click="
                       handleDelete(
-                        indexMethod(scope.$index),
-                        scope.row.issue_id
-                      ),
-                        getTagDetail()
+                        
+                        scope.row.issueId
+                      )
+                        
                     "
                     >详情</el-button
                   >
                   <!-- 弹窗内容 -->
+                  <!-- indexMethod(scope.$index), -->
                   <el-dialog
                     title="ISSUE详情"
                     :visible.sync="dialogTableVisible"
@@ -185,7 +186,7 @@
                     @click="
                       handleModify(
                         indexMethod(scope.$index),
-                        scope.row.issue_id
+                        scope.row.issueId
                       )
                     "
                     >修改</el-button
@@ -210,7 +211,7 @@
         </el-footer>
       </el-container>
     </div>
-    <IssueModify v-if="showMotify"></IssueModify>
+    <IssueModify v-if="showMotify" :modifyId="modifyId"></IssueModify>
   </div>
 </template>
 
@@ -222,7 +223,7 @@ import IssueModify from "@/views/IssueModify.vue";
 export default {
   name: "issuelist",
   components: {
-    IssueModify,
+    IssueModify
   },
   data() {
     return {
@@ -248,7 +249,7 @@ export default {
       showMotify: false,
       //弹窗tagId: "",
       issue_name: "",
-      issue_id: 2,
+      issue_id: "",
       create_man: "",
       beta: "",
       create_date: "",
@@ -259,6 +260,8 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       formLabelWidth: "120px",
+      //缓存修改issue的id
+      modifyId:"",
     };
   },
 
@@ -299,15 +302,27 @@ export default {
 
     getData() {
       axios({
-        method: "get",
-        url: "/data/tabledate.json",
+        method: "post",
+        url: "http://localhost:8999/searchIssue",
+        data:{
+          issueId:0,
+          status:null,
+          createMan:null,
+          updateMan:null,
+          createDate:null,
+          updateDate:null,
+          date2:null,
+          date4:null,
+          pageIndex:1,
+          pageSize:20  
+        }
       })
-        .then((data) => {
+        .then((res) => {
           // console.log(data);
           // 将数据赋值给tableData
-          this.tableData = data.data;
+          this.tableData = res.data.issue;
           // 将数据的长度赋值给totalCount
-          this.totalCount = data.data.length;
+          this.totalCount = res.data.issue.length;
           // console.log(this.tableData);
           // console.log(this.totalCount);
         })
@@ -340,21 +355,24 @@ export default {
     //取修改按钮的数据
     handleModify(index, row) {
       this.modify();
+      this.modifyId=row,
       console.log(index, row);
     },
     //取详情按钮的数据index, row
-    handleDelete() {
+    handleDelete(n) {
+      console.log(n);
+      this.getTagDetail(n);
       // console.log(index, row);
     },
     //弹窗
-    getTagDetail: function () {
+    getTagDetail(n) {
       this.dialogTableVisible = true;
-      console.log("+++++++++++++++++++++"+this.issue_id)
+      console.log("+++++++++++++++++++++"+n)
       axios({
         method: "post",
         url: "http://localhost:8999/searchIssue",
         data:{
-          issueId:2,
+          issueId: n,
           status:null,
           createMan:null,
           updateMan:null,
@@ -370,7 +388,7 @@ export default {
           console.log(res.data.issue[0]);
           this.issue_name = res.data.issue[0].issueName;
           this.issue_id = res.data.issue[0].issueId;
-          this.create_man = res.data.issue[0].createDate;
+          this.create_man = res.data.issue[0].createMan;
           this.beta = res.data.issue[0].beta;
           this.create_date = res.data.issue[0].createDate;
           this.update_date = res.data.issue[0].updateDate;
