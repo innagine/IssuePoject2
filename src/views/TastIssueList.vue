@@ -9,10 +9,7 @@
             <el-table
               ref="multipleTable"
               :data="
-                tableData.slice(
-                  (currentPage - 1) * PageSize,
-                  currentPage * PageSize
-                )
+                tableData
               "
               tooltip-effect="dark"
               style="width: 100%"
@@ -225,7 +222,7 @@
             :page-size="PageSize"
             :page-sizes="[20, 40, 60, 80]"
             layout="total, prev, pager, next , sizes, jumper"
-            :total="tableData.length"
+            :total="totalCount"
           >
           </el-pagination>
         </el-footer>
@@ -322,7 +319,7 @@ export default {
     //   console.log(this.form);
     // },
 
-    getData() {
+    getData(index,pagesize) {
       // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.User.userName);
       axios({
         method: "post",
@@ -337,8 +334,8 @@ export default {
           updateDate:null,
           date2:null,
           date4:null,
-          pageIndex:1,
-          pageSize:20  
+          pageIndex:index,
+          pageSize:pagesize  
         }
       })
         .then((res) => {
@@ -347,9 +344,10 @@ export default {
           this.tableData = res.data.issue;
           // console.log(res.data.issue);
           // 将数据的长度赋值给totalCount
-          this.totalCount = res.data.issue.length;
+          this.totalCount = res.data.total;
           // console.log(this.tableData);
-          // console.log(this.totalCount);
+          console.log("!!!!!!!!"+this.totalCount);
+          this.currentPage=index;
         })
         .catch((err) => {
           console.log("error...", err);
@@ -361,7 +359,7 @@ export default {
       // 改变每页显示的条数
       this.PageSize = val;
       // 点击每页显示的条数时，显示第一页
-      this.getData(val, 1);
+      this.getData(1,val );
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1;
     },
@@ -370,7 +368,7 @@ export default {
       // 改变默认的页数
       this.currentPage = val;
       // 切换页码时，要获取每页显示的条数
-      this.getData(this.PageSize, val * this.pageSize);
+      this.getData(this.currentPage,this.PageSize);
     },
     //修改页面跳转
     modify() {
@@ -455,26 +453,6 @@ export default {
         .catch((err) => {
           console.log("error...", err);
         });
-
-      // eslint-disable-next-line no-undef
-      // this.dialogTableVisible = true;
-      // this.$axios({
-      //   method: "post",
-      //   url: "/data/tabledate2.json",
-      //   data: {
-      //     data: {
-      //       tagId: this.tagId,
-      //     },
-      //   },
-      // }).then((response) => {
-      //   console.log(response.data.data);
-      //   this.tagId = response.data.data.tagId;
-      //   // console.log(this.tagId)
-      //   this.gridData[0].tagId = this.tagId;
-      //   this.tag = response.data.data.tag; // 第一种方法
-      //   this.gridData[0].tag = this.tag;
-      //   // 第二种方法. this.gridData[0].tag= response.data.data.dataSchema
-      // });
     },
     //隐藏
     childByValue(show){
@@ -484,7 +462,7 @@ export default {
     }
   },
   created: function () {
-    this.getData(this.currentPage);
+    this.getData(this.currentPage,20);
     console.log("1287313817313+++++++"+this.User.userId)
   },
 };

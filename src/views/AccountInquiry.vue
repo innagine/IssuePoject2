@@ -261,25 +261,6 @@ export default {
           console.log(err);
         });
 
-      // axios({
-      //   method: "post",
-      //   url: "http://localhost:8999/searchUser",
-      //   data: this.FormJsons,
-      // })
-      //   .then((...res) => {
-      //     console.log(res[0].data);
-      //     // console.log(data);
-      //     // 将数据赋值给tableData
-      //     this.tableData = res[0].data.users;
-      //     // 将数据的长度赋值给totalCount
-      //     this.totalCount = res[0].data.total;
-      //     // console.log(this.tableData);
-      //     this.currentPage=n;
-      //     // console.log(this.totalCount);
-      //   })
-      //   .catch((err) => {
-      //     console.log("error...", err);
-      //   });
     },
     // 分页
     // 每页显示的条数

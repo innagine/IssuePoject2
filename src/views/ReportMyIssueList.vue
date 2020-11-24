@@ -9,11 +9,7 @@
             <el-table
               ref="multipleTable"
               :data="
-                tableData.slice(
-                  (currentPage - 1) * PageSize,
-                  currentPage * PageSize
-                )
-              "
+                tableData"
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="handleSelectionChange"
@@ -205,7 +201,7 @@
             :page-size="PageSize"
             :page-sizes="[20, 40, 60, 80]"
             layout="total, prev, pager, next , sizes, jumper"
-            :total="tableData.length"
+            :total="totalCount"
           >
           </el-pagination>
         </el-footer>
@@ -280,27 +276,8 @@ export default {
     indexMethod(index) {
       return (this.currentPage - 1) * this.PageSize + index + 1;
     },
-    //查询提交
-    // onSubmit() {
-    //   /* json格式提交： */
-    //   let formData = JSON.stringify(this.form);
-    //   axios({
-    //     method: "post",
-    //     url: "xxxxxxx",
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //     withCredentials: true,
-    //     data: formData,
-    //   }).then((res) => {
-    //     this.tableData = res.data;
-    //     console.log(res);
-    //   });
-    //   console.log("submit!");
-    //   console.log(this.form);
-    // },
 
-    getData() {
+    getData(index,pagesize) {
       console.log("____________"+this.userId);
       axios({
         method: "post",
@@ -315,16 +292,17 @@ export default {
           updateDate:null,
           date2:null,
           date4:null,
-          pageIndex:1,
-          pageSize:20  
+          pageIndex:index,
+          pageSize:pagesize  
         }
       })
         .then((res) => {
-          console.log("112321321213213213"+res.data);
+          console.log("+++++++++++"+res.data);
           // 将数据赋值给tableData
           this.tableData = res.data.issue;
           // 将数据的长度赋值给totalCount
-          this.totalCount = res.data.issue.length;
+          this.totalCount = res.data.total;
+          this.currentPage=index;
           // console.log(this.tableData);
           // console.log(this.totalCount);
         })
@@ -338,17 +316,20 @@ export default {
       // 改变每页显示的条数
       this.PageSize = val;
       // 点击每页显示的条数时，显示第一页
-      this.getData(val, 1);
+      this.getData(1,val);
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1;
     },
+
     // 显示第几页
     handleCurrentChange(val) {
       // 改变默认的页数
       this.currentPage = val;
+      console.log("+++++++++))))))"+this.currentPage);
       // 切换页码时，要获取每页显示的条数
-      this.getData(this.PageSize, val * this.pageSize);
+      this.getData(this.currentPage,this.PageSize);
     },
+
     //修改页面跳转
     modify() {
       this.showIssueList = false;
@@ -431,7 +412,7 @@ export default {
     }
   },
   created: function () {
-    this.getData();
+    this.getData(this.currentPage,20);
     console.log("1287313817313+++++++"+this.userId)
   },
 };
