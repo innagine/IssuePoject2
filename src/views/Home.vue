@@ -20,7 +20,7 @@
           placeholder="请输入搜索内容"
           class="changestyle"
         ></el-input>
-        <el-button size="small">搜索</el-button>
+        <el-button size="small" @click="GlobalSearch">搜索</el-button>
       </el-menu-item>
 
       <el-menu-item index="7" style="float: right">
@@ -40,6 +40,7 @@
     <ReportIssue v-if="showReportIssue"></ReportIssue>
     <MyInfo v-if="showMyInfo" :User="user"></MyInfo>
     <Search v-if="showSearch"></Search>
+    <GlobalSearch v-if="showGlobalSearch" :send="input"></GlobalSearch>
   </div>
 </template>
 
@@ -52,6 +53,7 @@ import AccountInquiry from "@/views/AccountInquiry.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import MyInfo from "@/views/MyInfo.vue";
 import Search from "@/views/Search.vue";
+import GlobalSearch from '@/views/GlobalSearch'
 
 // 导入axios
 // import axios from "axios";
@@ -65,7 +67,8 @@ export default {
     AccountInquiry,
     ReportIssue,
     MyInfo,
-    Search
+    Search,
+    GlobalSearch
     
   },
   data() {
@@ -78,7 +81,7 @@ export default {
       url: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       name: "",
       role: "",
-      input: "",
+      input: "张",
       activeIndex: "",
       show: true,
       showCreateIssue: false,
@@ -86,6 +89,7 @@ export default {
       showReportIssue:false,
       showMyInfo:false,
       showSearch:false,
+      showGlobalSearch:false,
 
       // 登陆传过来的USER
       user:{}
@@ -150,6 +154,7 @@ export default {
       this.showReportIssue=false;
       this.showMyInfo=false;
       this.showSearch=false;
+      this.showGlobalSearch=false
     },
     // 创建ISSUE
     createIssue() {
@@ -159,6 +164,7 @@ export default {
       this.showAccountInquiry=false;
       this.showMyInfo=false;
       this.showSearch=false;
+      this.showGlobalSearch=false
     },
     // 展示首页
     indexShow() {
@@ -168,6 +174,7 @@ export default {
       this.showReportIssue=false;
       this.showMyInfo=false;
       this.showSearch=false;
+      this.showGlobalSearch=false
     },
     //查看ISSUE报表
     reportIssue(){
@@ -177,6 +184,7 @@ export default {
       this.showAccountInquiry=false;
       this.showMyInfo=false;
       this.showSearch=false;
+      this.showGlobalSearch=false
     },
     //展示个人页面
     myInfo(){
@@ -186,6 +194,7 @@ export default {
       this.showAccountInquiry=false;
       this.showMyInfo=true;
       this.showSearch=false;
+      this.showGlobalSearch=false
     },
     //展示高级检索页面
     Search(){
@@ -195,6 +204,18 @@ export default {
       this.showAccountInquiry=false;
       this.showMyInfo=false;
       this.showSearch=true;
+      this.showGlobalSearch=false
+    },
+
+    //展示全局搜索
+    GlobalSearch(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
+      this.showGlobalSearch=true
     },
 
 
