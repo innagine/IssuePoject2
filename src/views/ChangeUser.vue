@@ -21,7 +21,7 @@
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
         <el-input v-model="ruleForm.email"
-        @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
+         @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input
@@ -75,17 +75,22 @@ export default {
   props:['User'],
   data() {
     var validatePass = (rule, value, callback) => {
-      var specialKey = "!@#$%^&*()_+~";
-      var reg1=/[!@#$%^&*()_+~]/;
-      var reg2=/[^0-9a-zA-Z!@#$%^&*()_+~]/;
+      var specialKey = "!@#$%^&*()_+~";     //特殊字符
+      var hasSpecialKey=/[!@#$%^&*()_+~]/;  //含有特殊字符
+      var illegalKey=/[^0-9a-zA-Z!@#$%^&*()_+~]/; //出现不在合法字符集中的非法字符
+      var hasLower=/[a-z]/;  //含有小写字母
+      var hasUpper=/[A-Z]/;  //含有大写字母
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
         if (value.length <= 8) {
           callback(new Error("最少八位密码"));
-        } else if (!reg1.test(value)) {
+        } else if (!hasSpecialKey.test(value)) {
           callback(new Error("密码必须包含" + specialKey + "等特殊字符"));
-        } else if(reg2.test(value)){
+        } else if(!hasLower.test(value)||!hasUpper.test(value)){
+          callback(new Error("密码必须包含大小写字母"))
+        } 
+        else if(illegalKey.test(value)){
           callback(new Error("密码包含非法字符"))
         } else {
           if (this.ruleForm.checkPass !== "") {
@@ -109,7 +114,7 @@ export default {
       if(reg.test(value)){
         callback(new Error("用户姓名包含非法字符"))
       }
-    }
+    };
     return {
       ruleForm: {
         
@@ -122,8 +127,7 @@ export default {
       rules: {
         userName: [
           { required: true, message: "请输入姓名", trigger: "blur" },
-          { validator: validateName, trigger:'blur'}
-          
+          { validator: validateName, trigger:'blur'},
         ],
         email: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" },
