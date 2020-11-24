@@ -16,10 +16,12 @@
           v-model="ruleForm.userName"
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
-        <el-input v-model="ruleForm.email"></el-input>
+        <el-input v-model="ruleForm.email"
+        @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input
@@ -29,6 +31,7 @@
           show-password
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
@@ -39,6 +42,7 @@
           show-password
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item>
