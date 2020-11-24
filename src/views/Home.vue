@@ -35,10 +35,10 @@
     </el-menu>
     <RotationChart v-if="show"></RotationChart>
     <Choose v-if="show" @son="FromSon"></Choose>
-    <CreateIssue v-if="showCreateIssue"></CreateIssue>
+    <CreateIssue v-if="showCreateIssue" :User="user"></CreateIssue>
     <AccountInquiry v-if="showAccountInquiry"></AccountInquiry>
     <ReportIssue v-if="showReportIssue"></ReportIssue>
-    <MyInfo v-if="showMyInfo"></MyInfo>
+    <MyInfo v-if="showMyInfo" :User="user"></MyInfo>
     <Search v-if="showSearch"></Search>
   </div>
 </template>
@@ -86,16 +86,21 @@ export default {
       showReportIssue:false,
       showMyInfo:false,
       showSearch:false,
+
+      // 登陆传过来的USER
+      user:{}
     };
   },
 
   //获取用户名
   created() {
 
-    // 获取传参
+    // 登陆获取传参
     console.log(this.$route.query.user);
     //处理用户数据
     // var user=JSON.parse(this.$route.query.user)
+    this.user=(this.$route.query.user)
+    // console.log("bbbbbbbbbbb"+this.user.userId)
     this.handle(this.$route.query.user);
     // this.role= user.iden
     // this.name= user.name

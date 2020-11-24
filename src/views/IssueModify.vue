@@ -20,20 +20,20 @@
         </el-form-item>
       </el-form>
     </div>
-    <IssueList v-if="showIssueList" ></IssueList>
+    <!-- <IssueList v-if="showIssueList" ></IssueList> -->
   </div>
 </template>
 
 <script>
-import IssueList from "@/views/IssueList.vue";
+// import IssueList from "@/views/IssueList.vue";
 import axios from "axios";
 
 export default {
   
-  name: "issueModify",
-  components: {
-    IssueList,
-  },
+  // name: "issueModify",
+  // components: {
+  //   IssueList,
+  // },
   props: ['modifyId'],
   data() {
     return {
@@ -52,6 +52,8 @@ export default {
       console.log(1111);
       this.showIssueList = true;
       this.showMotify = false;
+      this.$emit('childByValue', {showIssueList:this.showIssueList,showMotify:this.showMotify})
+      
     },
     //修改Issue
     submitForm(formName) {
@@ -66,12 +68,13 @@ export default {
       })
         .then((res) => {
           console.log(res.data);
-          
+          this.back();
         })
         .catch((Error) => {
           console.log(Error);
         });
           alert("submit!");
+          
         } else {
           console.log("error submit!!");
           return false;

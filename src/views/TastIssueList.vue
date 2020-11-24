@@ -9,16 +9,15 @@
             <el-table
               ref="multipleTable"
               :data="
-                tableData
+                tableData.slice(
+                  (currentPage - 1) * PageSize,
+                  currentPage * PageSize
+                )
               "
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="handleSelectionChange"
             >
-            <!-- .slice(
-                  (currentPage - 1) * PageSize,
-                  currentPage * PageSize
-                ) -->
               <!-- :row-class-name="tableRowClassName" -->
               <!-- 表格内容 -->
               <el-table-column type="selection"> </el-table-column>
@@ -191,6 +190,17 @@
                       </el-form>
                     </div>
                   </el-dialog>
+                  <!-- <el-button
+                    size="mini"
+                    @click="
+                      handleModify(
+                        indexMethod(scope.$index),
+                        scope.row.issueId
+                      )
+                    "
+                    v-if="scope.row.status!=='关闭'"
+                    >finsh</el-button
+                  > -->
                   <el-button
                     size="mini"
                     @click="
@@ -215,7 +225,7 @@
             :page-size="PageSize"
             :page-sizes="[20, 40, 60, 80]"
             layout="total, prev, pager, next , sizes, jumper"
-            :total="totalCount"
+            :total="tableData.length"
           >
           </el-pagination>
         </el-footer>
@@ -229,16 +239,13 @@
 import axios from "axios";
 import IssueModify from "@/views/IssueModify.vue";
 
-
 //表格
 export default {
-  props:['issueObj'],
-
-  name: "issuelist",
+  name: "TastIssueList",
+  props:['User'],
   components: {
     IssueModify
   },
-  
   data() {
     return {
       //搜索数据
@@ -277,26 +284,9 @@ export default {
       formLabelWidth: "120px",
       //缓存修改issue的id
       modifyId:"",
-      issueObjlist:this.issueObj,
-
-      //搜索数据
-      search:{
-          userId:null,
-          issueId:null,
-          status:null,
-          createMan:null,
-          updateMan:null,
-          createDate:null,
-          updateDate:null,
-          date2:null,
-          date4:null,
-          pageIndex:null,
-          pageSize:null 
-      }
     };
   },
-
-
+  
   methods: {
     //多选框取值
     handleSelectionChange(val) {
@@ -332,134 +322,55 @@ export default {
     //   console.log(this.form);
     // },
 
-    getData(n1,n2) {
-      // console.log(this.issueObj.issueId);
-      if(!this.issueObj.issueId){
-        this.issueObj.issueId=0;
-        console.log("++++++"+this.issueObj.issueId);
-      }
-      // console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
-      // console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
-      if(n1==undefined){
-          n1=20;
-      }
-      if(n2==undefined){
-          n2=1
-      }
-      // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.issueObj.createMan);
-      this.search.issueId=this.issueObj.issueId,
-      // console.log("N999@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-      this.search.status=this.issueObj.status,
-      this.search.createMan=this.issueObj.createMan,
-      this.search.updateMan=this.issueObj.updateMan,
-      this.search.createDate=this.issueObj.date1,
-      this.search.updateDate=this.issueObj.date3,
-      this.search.date2=this.issueObj.date2,
-      this.search.date4=this.issueObj.date4,
+    getData() {
+      // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.User.userName);
       axios({
         method: "post",
         url: "http://localhost:8999/searchIssue",
         data:{
           userId:null,
-          issueId:this.search.issueId,
-          status:this.issueObj.status,
-          createMan:this.issueObj.createMan,
-          updateMan:this.issueObj.updateMan,
-          createDate:this.issueObj.date1,
-          updateDate:this.issueObj.date3,
-          date2:this.issueObj.date2,
-          date4:this.issueObj.date4,
-          pageIndex:n2,
-          pageSize:n1   
+          issueId:0,
+          status:null,
+          createMan:null,
+          updateMan:this.User.userName,
+          createDate:null,
+          updateDate:null,
+          date2:null,
+          date4:null,
+          pageIndex:1,
+          pageSize:20  
         }
       })
         .then((res) => {
-
-
+          // console.log(data);
           // 将数据赋值给tableData
           this.tableData = res.data.issue;
+          // console.log(res.data.issue);
           // 将数据的长度赋值给totalCount
-          this.totalCount = res.data.total;
-        })
-        .catch((err) => {
-          console.log("error...", err);
-        });
-
-    
-        
-    },
-
-    getDataA(n1,n2) {
-      console.log("N4@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-      if(this.search.issueId===undefined){
-        this.search.issueId=0;
-      }
-      console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
-      console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
-      if(n1==undefined){
-          n1=20;
-      }
-      if(n2==undefined){
-          n2=1
-      }
-      // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.issueObj.createMan);
-      console.log("N3@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-
-      axios({
-        method: "post",
-        url: "http://localhost:8999/searchIssue",
-        data:{
-          userId:null,
-          issueId:this.search.issueId,
-          status:this.search.status,
-          createMan:this.search.createMan,
-          updateMan:this.search.updateMan,
-          createDate:this.search.date1,
-          updateDate:this.search.date3,
-          date2:this.search.date2,
-          date4:this.search.date4,
-          pageIndex:n2,
-          pageSize:n1   
-        }
-      })
-        .then((res) => {
-          // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+res.data.total);
-          // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+res.data);
-
-          // 将数据赋值给tableData
-          this.tableData = res.data.issue;
-          // 将数据的长度赋值给totalCount
-          this.totalCount = res.data.total;
+          this.totalCount = res.data.issue.length;
           // console.log(this.tableData);
           // console.log(this.totalCount);
         })
         .catch((err) => {
           console.log("error...", err);
         });
-
-    
-        
     },
-
     // 分页
     // 每页显示的条数
     handleSizeChange(val) {
-      console.log(val);
       // 改变每页显示的条数
       this.PageSize = val;
       // 点击每页显示的条数时，显示第一页
-      this.getDataA(val, 1);
+      this.getData(val, 1);
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1;
-      
     },
     // 显示第几页
     handleCurrentChange(val) {
-      console.log(val);
       // 改变默认的页数
       this.currentPage = val;
       // 切换页码时，要获取每页显示的条数
-      this.getDataA(this.PageSize, this.currentPage);
+      this.getData(this.PageSize, val * this.pageSize);
     },
     //修改页面跳转
     modify() {
@@ -472,23 +383,49 @@ export default {
       this.modifyId=row,
       console.log(index, row);
     },
+
+    // handleModify(index, row) {
+    //   console.log(index, row);
+    //    axios({
+    //     method: "post",
+    //     url: "http://localhost:8999/finish",
+    //     // params:{issueId:row}
+    //     data:{
+    //       issueId:row,
+    //     }
+    //   })
+    //     .then((res) => {
+    //       console.log(".........."+res.data);
+    //       // 将数据赋值给tableData
+    //       // this.tableData = res.data.issue;
+    //       // 将数据的长度赋值给totalCount
+    //       // this.totalCount = res.data.issue.length;
+    //       // console.log(this.tableData);
+    //       // console.log(this.totalCount);
+    //       // this.getData(this.currentPage);
+    //     })
+    //     .catch((err) => {
+    //       console.log("error...", err);
+    //       console.log("..........+++++++");
+    //     });
+    //     this.getData(this.currentPage);
+    // },
+
+
     //取详情按钮的数据index, row
     handleDelete(n) {
       console.log(n);
       this.getTagDetail(n);
       // console.log(index, row);
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++"+this.issueObj.issueId);
-
     },
     //弹窗
     getTagDetail(n) {
       this.dialogTableVisible = true;
-      // console.log("+++++++++++++++++++++"+n)
+      console.log("+++++++++++++++++++++"+n)
       axios({
         method: "post",
         url: "http://localhost:8999/searchIssue",
         data:{
-            
           issueId: n,
           status:null,
           createMan:null,
@@ -502,7 +439,7 @@ export default {
         }
       })
         .then((res) => {
-          // console.log(res.data.issue[0]);
+          console.log(res.data.issue[0]);
           this.issue_name = res.data.issue[0].issueName;
           this.issue_id = res.data.issue[0].issueId;
           this.create_man = res.data.issue[0].createMan;
@@ -511,8 +448,9 @@ export default {
           this.update_date = res.data.issue[0].updateDate;
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
-          this.modifyA = res.data.issue[0].solution;
           this.level = res.data.issue[0].level;
+          this.modifyA = res.data.issue[0].solution;
+          this.getData(this.currentPage);
         })
         .catch((err) => {
           console.log("error...", err);
@@ -545,9 +483,10 @@ export default {
       this.showMotify = show.showMotify;
     }
   },
-  // created: function () {
-  //   this.getData();
-  // },
+  created: function () {
+    this.getData(this.currentPage);
+    console.log("1287313817313+++++++"+this.User.userId)
+  },
 };
 </script>
 

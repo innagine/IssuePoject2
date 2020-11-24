@@ -29,7 +29,7 @@
         ></el-col>
       </el-row>
 
-      <el-form-item label="创建时间" required>
+      <el-form-item label="创建时间" >
         <el-col :span="11">
           <el-form-item prop="date1">
             <el-date-picker
@@ -52,7 +52,7 @@
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item label="修改时间" required>
+      <el-form-item label="修改时间" >
                <el-col :span="11">
           <el-form-item prop="date3">
             <el-date-picker
@@ -79,7 +79,7 @@
         <el-select v-model="ruleForm.status" placeholder="请选择Issue状态">
           <el-option label="待修改" value="待修改"></el-option>
           <el-option label="已完成" value="已完成"></el-option>
-          <el-option label="待验证" value="已完成"></el-option>
+          <el-option label="待验证" value="待验证"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -92,15 +92,15 @@
     </el-form>
     </div>
     </el-collapse-transition>
-     <el-button @click="show3 = !show3" v-if="!show3"  style="margin: 0 20px">收起</el-button>
-    <IssueList></IssueList>
+     <el-button @click="show3 = !show3" v-if="!show3"  style="margin: 0 20px">展开</el-button>
+    <IssueList :issueObj="issueObj" ref="child" v-if="showIssueList"></IssueList>
     </div>
 </template>
 
 <script>
 import IssueList from '@/views/IssueList'
 // 导入axios
-import axios from "axios";
+// import axios from "axios";
 
 
 export default {
@@ -110,15 +110,18 @@ export default {
     },
     data() {
     return {
+      issueObj:{},
       show3: true,
+      showIssueList:false,
       ruleForm: {
-        iusseId:"",
+        
+        iusseId:'',
         createMan: null,
         updateMan: null,
-        date1: "",
-        date2: "",
-        date3: "",
-        date4: "",
+        date1: null,
+        date2: null,
+        date3: null,
+        date4: null,
         status:null,
         delivery: false,
         type: [],
@@ -126,17 +129,10 @@ export default {
         desc: "",
       },
       rules: {
-        name: [
-          { required: true, message: "请输入ISSUE题目", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        region: [
-          { required: true, message: "请填写步骤重现", trigger: "change" },
-        ],
         date1: [
           {
             type: "date",
-            required: true,
+            // required: true,
             message: "请选择日期",
             trigger: "change",
           },
@@ -144,7 +140,7 @@ export default {
         date2: [
           {
             type: "date",
-            required: true,
+            // required: true,
             message: "请选择时间",
             trigger: "change",
           },
@@ -164,46 +160,70 @@ export default {
       },
     };
   },
+
   methods: {
     submitForm(formName) {
+      this.showIssueList=true;
+      //   data: {
+      //     issueId:this.ruleForm.issueId,
+      //     status:this.ruleForm.status,
+      //     createMan:this.ruleForm.createMan,
+      //     updateMan:this.ruleForm.updateMan,
+      //     createDate:this.ruleForm.date1,
+      //     updateDate:this.ruleForm.date3,
+      //     date2:this.ruleForm.date2,
+      //     date4:this.ruleForm.date4,
+      //     pageIndex:1,
+      //     pageSize:20        
+      //     }
 
-            // 发送post请求
-          axios({
-        method: "post",
-        url: "http://localhost:8999/searchIssue",
-        data: {
-          issueId:this.ruleForm.issueId,
-          status:this.ruleForm.status,
-          createMan:this.ruleForm.createMan,
-          updateMan:this.ruleForm.updateMan,
-          createDate:this.ruleForm.date1,
-          updateDate:this.ruleForm.date3,
-          date2:this.ruleForm.date2,
-          date4:this.ruleForm.date4,
-          pageIndex:1,
-          pageSize:20        
-          }
-      })
-        .then((res) => {
-          console.log("data..", res.data);
-          console.log(typeof(res.data));
-        })
-        .catch((err) => {
-          console.log("error...", err);
-        });
+      //       // 发送post请求
+      //     axios({
+      //   method: "post",
+      //   url: "http://localhost:8999/searchIssue",
+      //   data: {
+      //     issueId:this.ruleForm.issueId,
+      //     status:this.ruleForm.status,
+      //     createMan:this.ruleForm.createMan,
+      //     updateMan:this.ruleForm.updateMan,
+      //     createDate:this.ruleForm.date1,
+      //     updateDate:this.ruleForm.date3,
+      //     date2:this.ruleForm.date2,
+      //     date4:this.ruleForm.date4,
+      //     pageIndex:1,
+      //     pageSize:20        
+      //     }
+      // })
+      //   .then((res) => {
+      //     console.log("data..", res.data);
+      //     console.log(typeof(res.data));
+      //     this.issueObj=res.data;
+      //   })
+      //   .catch((err) => {
+      //     console.log("error...", err);
+      //   });
 
 
 
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.issueObj=this.ruleForm;
+          this.$refs.child.getData();
+          this.$notify({
+           title: "消息",
+           message: "搜索完成",
+           type: "success",
+           });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+      // this.$refs.child.getData();
+      this.resetForm(formName);
     },
+    
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },

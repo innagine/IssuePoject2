@@ -129,15 +129,7 @@ export default {
           { required: true, validator: validatePass2, trigger: "blur" },
         ],
       },
-      userId: "",
-      userName: "",
-      email: "",
-      password1: "",
-      password2: "",
-
-      showpoint: false,
-      account: "",
-      password: "",
+    
       formLabelAlign: {
         name: "",
         region: "",
@@ -147,25 +139,25 @@ export default {
   },
 
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    submitForm() {
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     alert("submit!");
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
 
       // 发送post请求，请求注册
       axios({
         method: "post",
         url: "http://localhost:8999/regist",
         data: {
-          userId: this.userId,
-          userName: this.userName,
-          email: this.email,
-          password: this.password1,
+          userId: this.ruleForm.userId,
+          userName: this.ruleForm.userName,
+          email: this.ruleForm.email,
+          password: this.ruleForm.checkPass,
         },
       })
         .then((res) => {
@@ -174,15 +166,39 @@ export default {
 
           if (res.data == "1") {
             //转跳到登录页面
-            alert("注册成功");
+           this.$notify({
+           title: "消息",
+           message: "注册成功，请登录",
+           type: "success",
+           });
             this.$router.push({
               path: "/",
               query: {
                 user: res.data,
               },
             });
-          } else {
-            alert("注册失败");
+          } 
+          else if(res.data == "2"){
+                       this.$notify({
+           title: "消息",
+           message: "注册失败",
+           type: "warning",
+           });
+          }
+          else if(res.data == "0"){
+                       this.$notify({
+           title: "消息",
+           message: "用户ID已存在",
+           type: "warning",
+           });
+          }
+          
+          else {
+          this.$notify({
+           title: "消息",
+           message: "注册失败",
+           type: "warning",
+           });
           }
         })
         .catch((err) => {

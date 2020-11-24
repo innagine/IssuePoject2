@@ -14,10 +14,10 @@
           show-password
         ></el-input>
         <div class="btn" @click="Login">
-          <span ref="point" v-if="showpoint" ></span>登陆
+          <span ref="point" ></span>登陆
         </div>
         <div class="btn" @click="Register">
-          <span ref="point" v-if="showpoint"></span>注册
+          <span ref="point" ></span>注册
         </div>
       </el-card>
     </div>
@@ -35,7 +35,6 @@ export default {
   data() {
     return {
       list: [],
-      showpoint: false,
       account: "",
       password: "",
 
@@ -54,6 +53,27 @@ export default {
   methods: {
     // 登陆验证
     Login() {
+
+      //判断输入框是否为空
+      if(!this.account){
+        this.$notify({
+           title: "消息",
+           message: "请输入账号",
+           type: "warning",
+           });
+        return 
+      }
+      if(!this.password){
+        this.$notify({
+           title: "消息",
+           message: "请输入密码",
+           type: "warning",
+           });
+        return  
+      }
+
+
+
       // 发送get请求，请求用户匹配
       axios({
         method: "post",
@@ -63,13 +83,39 @@ export default {
         .then((res) => {
           console.log("data..", res.data);
           console.log(typeof(res.data))
-          //转跳到主页
+          if(res.data.identity=="该用户不存在"){
+           this.$notify({
+           title: "消息",
+           message: "该用户不存在",
+           type: "warning",
+           });
+            this.$router.push({path: "/",});
+          }
+          else if(res.data.identity=="密码错误"){
+            this.$notify({
+           title: "消息",
+           message: "密码错误",
+           type: "warning",
+           });
+            this.$router.push({path: "/",});
+          }
+          else if(res.data.identity=="登录失败，该用户已注销"){
+            this.$notify({
+           title: "消息",
+           message: "用户已注销",
+           type: "warning",
+           });
+            this.$router.push({path: "/",});
+          }else{
+            // 转跳到主页
           this.$router.push({
           path: "/home",
           query:{
               user:res.data
             }
           });
+          }
+          
         })
         .catch((err) => {
           console.log("error...", err);
@@ -91,7 +137,9 @@ export default {
       this.$router.push({
         path: "/register",
       });
+      
     },
+    
 
     // btn(event) {
     //   this.showpoint = !this.showpoint;

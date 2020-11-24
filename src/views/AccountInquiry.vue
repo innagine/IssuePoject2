@@ -48,27 +48,28 @@
           <el-table
             ref="multipleTable"
             :data="
-              tableData.slice(
-                (currentPage - 1) * PageSize,
-                currentPage * PageSize
-              )
+              tableData
             "
             tooltip-effect="dark"
             style="width: 100%"
             @selection-change="handleSelectionChange"
           >
+          <!-- .slice(
+                (currentPage - 1) * PageSize,
+                currentPage * PageSize
+              ) -->
             <!-- 表格内容 -->
             <el-table-column type="selection" width="60"> </el-table-column>
             <el-table-column type="index" :index="indexMethod" label="序号">
             </el-table-column>
-            <el-table-column prop="user_id" label="用户ID" width="120">
+            <el-table-column prop="userId" label="用户ID" width="120" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="user_name" label="用户姓名" width="120">
+            <el-table-column prop="userName" label="用户姓名" width="120">
             </el-table-column>
             <el-table-column prop="email" label="邮箱" show-overflow-tooltip>
             </el-table-column>
             <el-table-column
-              prop="create_date"
+              prop="createDate"
               label="注册时间"
               show-overflow-tooltip
             >
@@ -151,7 +152,7 @@ export default {
       PageSize: 20,
       //查询数据
       FormJsons: {
-        userId: 0,
+        userId: null,
         userName: null,
         pageIndex: 1,
         pageSize: 20,
@@ -203,6 +204,7 @@ export default {
     onSubmit() {
       /* json格式提交： */
       //判断搜索用户ID和用户姓名是否为空
+      this.currentPage=1
       if (this.form.user_id) {
         this.FormJsons.userId = this.form.user_id;
         //缓存搜索得用户id
@@ -216,17 +218,22 @@ export default {
       // axios post请求
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://localhost:8999/searchUser",
         data: this.FormJsons,
       })
-        .then((res) => {
-          console.log(res.data);
-          this.tableData = res.data;
-          this.totalCount = res.data.total;
+        .then((...res) => {
+          console.log("++++++++++++"+res[0].data);
+          this.tableData = res[0].data.users;
+          this.totalCount = res[0].data.total;
+          console.log("__________________"+this.tableData);
+          // this.tableData = res.data;
+          // this.totalCount = res.data.total;
+          
         })
         .catch((Error) => {
           console.log(Error);
         });
+        // this.getData();
       //值置为空
       this.FormJsons.userId = null;
       this.FormJsons.userName = null;
@@ -235,42 +242,44 @@ export default {
 
     getData(n) {
       // 这里使用axios，使用时请提前引入
-      // this.Paging.userId=this.userId;
-      // this.Paging.userName=this.userName;
-      // this.Paging.currentPage=n1;
-      // axios({
-      //   method: "post",
-      //   url: "/data/tabledate.json",
-      //   data:this.Paging,
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     this.tableData = res.data;
-      //     this.totalCount = res.data.length;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-
+      this.Paging.userId=this.userId;
+      this.Paging.userName=this.userName;
+      this.Paging.pageIndex=n;
+      console.log("&&&&&&&&&&&&"+this.Paging.pageIndex);
       axios({
         method: "post",
         url: "http://localhost:8999/searchUser",
-        data: this.FormJsons,
+        data:this.Paging,
       })
         .then((...res) => {
-          console.log(res[0].data);
-          // console.log(data);
-          // 将数据赋值给tableData
+          console.log(res);
           this.tableData = res[0].data.users;
-          // 将数据的长度赋值给totalCount
           this.totalCount = res[0].data.total;
-          // console.log(this.tableData);
           this.currentPage=n;
-          // console.log(this.totalCount);
         })
         .catch((err) => {
-          console.log("error...", err);
+          console.log(err);
         });
+
+      // axios({
+      //   method: "post",
+      //   url: "http://localhost:8999/searchUser",
+      //   data: this.FormJsons,
+      // })
+      //   .then((...res) => {
+      //     console.log(res[0].data);
+      //     // console.log(data);
+      //     // 将数据赋值给tableData
+      //     this.tableData = res[0].data.users;
+      //     // 将数据的长度赋值给totalCount
+      //     this.totalCount = res[0].data.total;
+      //     // console.log(this.tableData);
+      //     this.currentPage=n;
+      //     // console.log(this.totalCount);
+      //   })
+      //   .catch((err) => {
+      //     console.log("error...", err);
+      //   });
     },
     // 分页
     // 每页显示的条数

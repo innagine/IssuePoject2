@@ -100,6 +100,7 @@ import axios from "axios";
 
 export default {
   name: "CreateIssue",
+  props:['User'],
   data() {
     return {
       ruleForm: {
@@ -122,7 +123,7 @@ export default {
         person:[ { required: true, message: "请输入ISSUE题目", trigger: "blur" },],
         name: [
           { required: true, message: "请输入ISSUE题目", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+          { min: 8, max: 30, message: "长度在 8 到 30 个字符", trigger: "blur" },
         ],
         region: [
           { required: true, message: "请填写步骤重现", trigger: "change" },
@@ -161,18 +162,18 @@ export default {
   methods: {
 
     submitForm(formName) {
-
+      console.log("AAAAAAAAAAAA"+this.User.userId);
       // 发送post请求
           axios({
         method: "post",
         url: "http://localhost:8999/createIssue",
         data: {
           issueName:this.ruleForm.name,
-          createMan:"1",
+          createMan:this.User.userName,
           level:this.ruleForm.grade,
           type:this.ruleForm.type2,
           beta:this.ruleForm.version,
-          userId:1,
+          userId:this.User.userId,
           updateMan:this.ruleForm.person,
           step:this.ruleForm.desc,
           solution:this.ruleForm.solution,
@@ -181,6 +182,20 @@ export default {
       })
         .then((res) => {
           console.log("data..", res.data);
+          if(res.data==1){
+          this.$notify({
+           title: "消息",
+           message: "IUSSUE创建成功",
+           type: "success",
+           });
+          }
+          else{
+            this.$notify({
+           title: "消息",
+           message: "IUSSUE创建失败",
+           type: "warning",
+           });
+          }
         })
         .catch((err) => {
           console.log("error...", err);
@@ -192,7 +207,11 @@ export default {
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$notify({
+           title: "消息",
+           message: "请继续创建",
+           type: "success",
+           });
         } else {
           console.log("error submit!!");
           return false;

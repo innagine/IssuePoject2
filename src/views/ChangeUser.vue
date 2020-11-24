@@ -8,8 +8,8 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="登陆ID" prop="userId">
-        <el-input :disabled="true">{{ userId }}</el-input>
+      <el-form-item label="登陆ID" prop="userId" >
+        <el-input :disabled="true" v-model="userId" >{{ userId }}</el-input>
       </el-form-item>
       <el-form-item label="姓名" prop="userName">
         <el-input
@@ -65,11 +65,10 @@ export function checkSpecificKey(str, specialKey) {
   }
   return false;
 }
+
 export default {
   name: "ChangeUser",
-  props: {
-    userId: String,
-  },
+  props:['User'],
   data() {
     var validatePass = (rule, value, callback) => {
       var specialKey = "!@#$%^&*()_+";
@@ -99,11 +98,13 @@ export default {
     };
     return {
       ruleForm: {
+        
         userName: "",
         email: "",
         pass: "",
         checkPass: "",
       },
+      userId:this.User.userId,
       rules: {
         userName: [
           { required: true, message: "请输入姓名", trigger: "blur" },
@@ -131,7 +132,7 @@ export default {
         method: "post",
         url: "http://localhost:8999/updateUser",
         data: {
-          userId:666,
+          userId:this.User.userId,
           userName:this.ruleForm.userName,
           email:this.ruleForm.email,
           pwd1:this.ruleForm.pass,
