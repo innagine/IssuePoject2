@@ -11,7 +11,10 @@
           class="demo-ruleForm"
         >
           <el-form-item prop="userId">
-            <el-input v-model="ruleForm.userId" placeholder="请输入ID"></el-input>
+            <el-input v-model="ruleForm.userId" placeholder="请输入ID"
+            maxlength="30"
+            show-word-limit
+            @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
           </el-form-item>
           <el-form-item  prop="userName">
             <el-input
@@ -19,10 +22,12 @@
               maxlength="30"
               show-word-limit
               placeholder="请输入用户名"
+              @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
             ></el-input>
           </el-form-item>
           <el-form-item prop="email" >
-            <el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>
+            <el-input v-model="ruleForm.email" placeholder="请输入邮箱"
+            @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
           </el-form-item>
           <el-form-item  prop="pass">
             <el-input
@@ -33,6 +38,7 @@
               maxlength="30"
               show-word-limit
               placeholder="请输入密码"
+              @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
             ></el-input>
           </el-form-item>
           <el-form-item  prop="checkPass">
@@ -44,6 +50,7 @@
               maxlength="30"
               show-word-limit
               placeholder="请确认密码"
+              @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -74,14 +81,23 @@ export default {
 
   data() {
     var validatePass = (rule, value, callback) => {
-      var specialKey = "!@#$%^&*()_+";
+      var specialKey = "!@#$%^&*()_+~";     //特殊字符
+      var hasSpecialKey=/[!@#$%^&*()_+~]/;  //含有特殊字符
+      var illegalKey=/[^0-9a-zA-Z!@#$%^&*()_+~]/; //出现不在合法字符集中的非法字符
+      var hasLower=/[a-z]/;  //含有小写字母
+      var hasUpper=/[A-Z]/;  //含有大写字母
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
         if (value.length <= 8) {
           callback(new Error("最少八位密码"));
-        } else if (!checkSpecificKey(value, specialKey)) {
+        } else if (!hasSpecialKey.test(value)) {
           callback(new Error("密码必须包含" + specialKey + "等特殊字符"));
+        } else if(!hasLower.test(value)||!hasUpper.test(value)){
+          callback(new Error("密码必须包含大小写字母"))
+        } 
+        else if(illegalKey.test(value)){
+          callback(new Error("密码包含非法字符"))
         } else {
           if (this.ruleForm.checkPass !== "") {
             this.$refs.ruleForm.validateField("checkPass");
@@ -99,7 +115,18 @@ export default {
         callback();
       }
     };
-
+    var validateName=(rule,value,callback)=>{
+      var reg=/[^\u4E00-\u9FA5a-zA-Z0-9]/g;
+      if(reg.test(value)){
+        callback(new Error("用户姓名包含非法字符"))
+      }
+    };
+    var validateId=(rule,value,callback)=>{
+      var _reg=/[^a-zA-Z0-9]/;
+      if(_reg.test(value)){
+        callback(new Error("用户ID包含非法字符"))
+      }
+    }
     return {
       ruleForm: {
         userId:"",
@@ -111,10 +138,11 @@ export default {
       rules: {
         userId:[
           { required: true, message: "请输入ID", trigger: "blur" },
+          { validator:validateId, trigger:'blur'}
         ],
         userName: [
           { required: true, message: "请输入姓名", trigger: "blur" },
-          {},
+          { validator: validateName, trigger:'blur'},
         ],
         email: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" },
