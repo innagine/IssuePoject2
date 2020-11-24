@@ -16,10 +16,12 @@
           v-model="ruleForm.userName"
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
-        <el-input v-model="ruleForm.email"></el-input>
+        <el-input v-model="ruleForm.email"
+        @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input
@@ -29,6 +31,7 @@
           show-password
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
@@ -39,6 +42,7 @@
           show-password
           maxlength="30"
           show-word-limit
+          @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -71,14 +75,18 @@ export default {
   props:['User'],
   data() {
     var validatePass = (rule, value, callback) => {
-      var specialKey = "!@#$%^&*()_+";
+      var specialKey = "!@#$%^&*()_+~";
+      var reg1=/[!@#$%^&*()_+~]/;
+      var reg2=/[^0-9a-zA-Z!@#$%^&*()_+~]/;
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
         if (value.length <= 8) {
           callback(new Error("最少八位密码"));
-        } else if (!checkSpecificKey(value, specialKey)) {
+        } else if (!reg1.test(value)) {
           callback(new Error("密码必须包含" + specialKey + "等特殊字符"));
+        } else if(reg2.test(value)){
+          callback(new Error("密码包含非法字符"))
         } else {
           if (this.ruleForm.checkPass !== "") {
             this.$refs.ruleForm.validateField("checkPass");
@@ -96,6 +104,12 @@ export default {
         callback();
       }
     };
+    var validateName=(rule,value,callback)=>{
+      var reg=/[^a-zA-Z0-9\u4E00-\u9FA5]/g;
+      if(reg.test(value)){
+        callback(new Error("用户姓名包含非法字符"))
+      }
+    }
     return {
       ruleForm: {
         
@@ -108,7 +122,8 @@ export default {
       rules: {
         userName: [
           { required: true, message: "请输入姓名", trigger: "blur" },
-          {},
+          { validator: validateName, trigger:'blur'}
+          
         ],
         email: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" },
