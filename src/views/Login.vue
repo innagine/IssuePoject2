@@ -83,7 +83,7 @@ export default {
         .then((res) => {
           console.log("data..", res.data);
           console.log(typeof(res.data))
-          if(res.data.identity=="该用户不存在"){
+          if(res.data.identity=="不存在"){
            this.$notify({
            title: "消息",
            message: "该用户不存在",
@@ -91,7 +91,7 @@ export default {
            });
             this.$router.push({path: "/",});
           }
-          else if(res.data.identity=="密码错误"){
+          else if(res.data.identity=="错误"){
             this.$notify({
            title: "消息",
            message: "密码错误",
@@ -99,7 +99,7 @@ export default {
            });
             this.$router.push({path: "/",});
           }
-          else if(res.data.identity=="登录失败，该用户已注销"){
+          else if(res.data.identity=="注销"){
             this.$notify({
            title: "消息",
            message: "用户已注销",

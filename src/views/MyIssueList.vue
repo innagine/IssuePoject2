@@ -54,18 +54,17 @@
                 show-overflow-tooltip
               >
               </el-table-column>
-              <el-table-column label="操作" width="150px">
+              <el-table-column label="操作" width="210px">
                 <template slot-scope="scope">
-                  <el-button
-                    style="background-color: #f78989 !important"
+                <!-- style="background-color: #a6a9ad !important" -->
+                <!--style="background-color: #a6a9ad !important"--->               
+                  <el-button                    
                     size="mini"
-                    type="danger"
+                    style="background-color: #a6a9ad !important"
                     @click="
                       handleDelete(
-                        
                         scope.row.issueId
-                      )
-                        
+                      )   
                     "
                     >详情</el-button
                   >
@@ -187,18 +186,9 @@
                       </el-form>
                     </div>
                   </el-dialog>
-                  <!-- <el-button
-                    size="mini"
-                    @click="
-                      handleModify(
-                        indexMethod(scope.$index),
-                        scope.row.issueId
-                      )
-                    "
-                    >修改</el-button
-                  > -->
                   <el-button
                     size="mini"
+                    style="background-color: #409eff !important"
                     @click="
                       handleModify(
                         indexMethod(scope.$index),
@@ -208,6 +198,17 @@
                     v-if="scope.row.status!=='关闭'"
                     >finsh</el-button
                   >
+                  <!-- 退回按钮 -->
+                  <el-button
+                    size="mini"
+                    style="background-color: #f78989 !important"
+                    @click="
+                      handleBack(
+                        scope.row.issueId
+                      )   
+                    "
+                    v-if="scope.row.status!=='关闭' && scope.row.status=='待验证'"
+                    >back</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -380,21 +381,36 @@ export default {
       })
         .then((res) => {
           console.log(".........."+res.data);
-          // 将数据赋值给tableData
-          // this.tableData = res.data.issue;
-          // 将数据的长度赋值给totalCount
-          // this.totalCount = res.data.issue.length;
-          // console.log(this.tableData);
-          // console.log(this.totalCount);
-          // this.getData(this.currentPage);
+          this.getData(this.currentPage,20);
         })
         .catch((err) => {
           console.log("error...", err);
           console.log("..........+++++++");
         });
-        this.getData(this.currentPage);
+        
     },
 
+    //退回
+     handleBack(row) {
+      console.log(row);
+       axios({
+        method: "post",
+        url: "http://localhost:8999/back",
+        // params:{issueId:row}
+        data:{
+          issueId:row,
+        }
+      })
+        .then((res) => {
+          console.log(".........."+res.data);
+          this.getData(this.currentPage,20);
+        })
+        .catch((err) => {
+          console.log("error...", err);
+          console.log("..........+++++++");
+        });
+        
+    },
     //取详情按钮的数据index, row
     handleDelete(n) {
       console.log(n);
@@ -434,7 +450,7 @@ export default {
           this.level = res.data.issue[0].level;
           console.log(res.data.issue[0].solution);
           this.modifyA = res.data.issue[0].solution;
-          this.getData(this.currentPage);
+          this.getData(this.currentPage,20);
         })
         .catch((err) => {
           console.log("error...", err);

@@ -187,27 +187,6 @@
                       </el-form>
                     </div>
                   </el-dialog>
-                  <!-- <el-button
-                    size="mini"
-                    @click="
-                      handleModify(
-                        indexMethod(scope.$index),
-                        scope.row.issueId
-                      )
-                    "
-                    v-if="scope.row.status!=='关闭'"
-                    >finsh</el-button
-                  > -->
-                  <el-button
-                    size="mini"
-                    @click="
-                      handleModify(
-                        indexMethod(scope.$index),
-                        scope.row.issueId
-                      )
-                    "
-                    >修改</el-button
-                  >
                 </template>
               </el-table-column>
             </el-table>

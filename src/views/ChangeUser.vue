@@ -160,6 +160,13 @@ export default {
       })
         .then((res) => {
           console.log("data.._________", res.data);
+          
+           this.$notify({
+           title: "消息",
+           message: "用户修改成功",
+           type: "success",
+           });
+          
         })
         .catch((err) => {
           console.log("error...", err);

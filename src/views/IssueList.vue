@@ -191,7 +191,7 @@
                       </el-form>
                     </div>
                   </el-dialog>
-                  <el-button
+                  <!-- <el-button
                     size="mini"
                     @click="
                       handleModify(
@@ -200,7 +200,7 @@
                       )
                     "
                     >修改</el-button
-                  >
+                  > -->
                 </template>
               </el-table-column>
             </el-table>

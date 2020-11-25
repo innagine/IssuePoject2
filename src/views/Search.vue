@@ -164,48 +164,6 @@ export default {
   methods: {
     submitForm(formName) {
       this.showIssueList=true;
-      //   data: {
-      //     issueId:this.ruleForm.issueId,
-      //     status:this.ruleForm.status,
-      //     createMan:this.ruleForm.createMan,
-      //     updateMan:this.ruleForm.updateMan,
-      //     createDate:this.ruleForm.date1,
-      //     updateDate:this.ruleForm.date3,
-      //     date2:this.ruleForm.date2,
-      //     date4:this.ruleForm.date4,
-      //     pageIndex:1,
-      //     pageSize:20        
-      //     }
-
-      //       // 发送post请求
-      //     axios({
-      //   method: "post",
-      //   url: "http://localhost:8999/searchIssue",
-      //   data: {
-      //     issueId:this.ruleForm.issueId,
-      //     status:this.ruleForm.status,
-      //     createMan:this.ruleForm.createMan,
-      //     updateMan:this.ruleForm.updateMan,
-      //     createDate:this.ruleForm.date1,
-      //     updateDate:this.ruleForm.date3,
-      //     date2:this.ruleForm.date2,
-      //     date4:this.ruleForm.date4,
-      //     pageIndex:1,
-      //     pageSize:20        
-      //     }
-      // })
-      //   .then((res) => {
-      //     console.log("data..", res.data);
-      //     console.log(typeof(res.data));
-      //     this.issueObj=res.data;
-      //   })
-      //   .catch((err) => {
-      //     console.log("error...", err);
-      //   });
-
-
-
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.issueObj=this.ruleForm;

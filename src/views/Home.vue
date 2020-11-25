@@ -10,11 +10,13 @@
       @select="selectMenu"
     >
       <el-menu-item index="1" @click="indexShow" >ISSUE首页</el-menu-item>
-      <el-menu-item index="2" @click="JudgeIssue" v-if="indexlisyt[0].index">issue创建</el-menu-item>
-      <el-menu-item index="3" @click="JudgeChart" v-if="indexlisyt[1].index">issue报表</el-menu-item>
+      <el-menu-item index="2" @click="JudgeIssue" v-if="indexlisyt[0].index">ISSUE创建</el-menu-item>
+      <el-menu-item index="3" @click="JudgeChart" v-if="indexlisyt[1].index">ISSUE报表</el-menu-item>
       <el-menu-item index="4" @click="JudgeUser" v-if="indexlisyt[2].index">账号管理</el-menu-item>
-      <el-menu-item index="5" @click="Search">高级检索</el-menu-item>
-      <el-menu-item index="6" class="prevent">
+      <el-menu-item index="5" @click="Search" v-if="indexlisyt[0].index">高级检索</el-menu-item>
+      <el-menu-item index="6" @click="MyIssueList" v-if="indexlisyt[0].index">ISSUE列表</el-menu-item>
+      <el-menu-item index="7" @click="TastIssueList" v-if="indexlisyt[0].index">我的任务</el-menu-item>
+      <el-menu-item index="8" class="prevent" v-if="indexlisyt[3].index">
         <el-input
           v-model="input"
           placeholder="请输入搜索内容"
@@ -23,11 +25,11 @@
         <el-button size="small" @click="GlobalSearch">搜索</el-button>
       </el-menu-item>
 
-      <el-menu-item index="7" style="float: right">
+      <el-menu-item index="9" style="float: right">
         <el-button size="small" @click="Login">注销</el-button>
       </el-menu-item>
-      <el-menu-item index="8" style="float: right" @click="myInfo">{{ name }}</el-menu-item>
-      <el-menu-item index="9" style="float: right" @click="myInfo">
+      <el-menu-item index="10" style="float: right" @click="myInfo">{{ name }}</el-menu-item>
+      <el-menu-item index="11" style="float: right" @click="myInfo">
           <div>
             <el-avatar :src="url"></el-avatar>
           </div>
@@ -40,7 +42,9 @@
     <ReportIssue v-if="showReportIssue"></ReportIssue>
     <MyInfo v-if="showMyInfo" :User="user"></MyInfo>
     <Search v-if="showSearch"></Search>
-    <GlobalSearch v-if="showGlobalSearch" :send="input"></GlobalSearch>
+    <GlobalSearch v-if="showGlobalSearch" :send="input" ref="global"></GlobalSearch>
+    <TastIssueList v-if="showTastIssueList" :User="user"></TastIssueList>
+    <MyIssueList  v-if="showMyIssueList" :User="user"></MyIssueList>
   </div>
 </template>
 
@@ -53,7 +57,9 @@ import AccountInquiry from "@/views/AccountInquiry.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import MyInfo from "@/views/MyInfo.vue";
 import Search from "@/views/Search.vue";
-import GlobalSearch from '@/views/GlobalSearch'
+import GlobalSearch from '@/views/GlobalSearch';
+import MyIssueList from '@/views/MyIssueList';
+import TastIssueList from '@/views/TastIssueList';
 
 // 导入axios
 // import axios from "axios";
@@ -68,20 +74,22 @@ export default {
     ReportIssue,
     MyInfo,
     Search,
-    GlobalSearch
+    GlobalSearch,
+    MyIssueList,
+    TastIssueList
     
   },
   data() {
     return {
       // 按钮显示
-      indexlisyt:[{index:false},{index:false},{index:false}],
+      indexlisyt:[{index:false},{index:false},{index:false},{index:false}],
 
 
       list: [],
       url: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       name: "",
       role: "",
-      input: "张",
+      input: "",
       activeIndex: "",
       show: true,
       showCreateIssue: false,
@@ -90,6 +98,8 @@ export default {
       showMyInfo:false,
       showSearch:false,
       showGlobalSearch:false,
+      showTastIssueList:false,
+      showMyIssueList:false,
 
       // 登陆传过来的USER
       user:{}
@@ -155,6 +165,8 @@ export default {
       this.showMyInfo=false;
       this.showSearch=false;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
     // 创建ISSUE
     createIssue() {
@@ -165,6 +177,8 @@ export default {
       this.showMyInfo=false;
       this.showSearch=false;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
     // 展示首页
     indexShow() {
@@ -175,6 +189,8 @@ export default {
       this.showMyInfo=false;
       this.showSearch=false;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
     //查看ISSUE报表
     reportIssue(){
@@ -185,6 +201,8 @@ export default {
       this.showMyInfo=false;
       this.showSearch=false;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
     //展示个人页面
     myInfo(){
@@ -195,6 +213,8 @@ export default {
       this.showMyInfo=true;
       this.showSearch=false;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
     //展示高级检索页面
     Search(){
@@ -205,6 +225,8 @@ export default {
       this.showMyInfo=false;
       this.showSearch=true;
       this.showGlobalSearch=false
+      this.showTastIssueList=false
+      this.showMyIssueList=false
     },
 
     //展示全局搜索
@@ -215,9 +237,38 @@ export default {
       this.showAccountInquiry=false;
       this.showMyInfo=false;
       this.showSearch=false;
+      this.showTastIssueList=false
+      this.showMyIssueList=false
       this.showGlobalSearch=true
+      this.$refs.global.getData();
     },
 
+    //展示个人任务
+    MyIssueList(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
+      this.showTastIssueList=false
+      this.showMyIssueList=true
+      this.showGlobalSearch=false
+    },
+
+    
+    //展示issue列表
+    TastIssueList(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
+      this.showTastIssueList=true
+      this.showMyIssueList=false
+      this.showGlobalSearch=false
+    },
 
     // 选择回传，子传父值，传回选择的事项
     FromSon(data) {
@@ -267,12 +318,14 @@ export default {
       if (this.role =="普通用户") {
         console.log("普通用户");
         this.indexlisyt[0].index=true;
+        this.indexlisyt[3].index=true;
         return 1;
       }
       // 如果是经理
       if (this.role =="经理") {
         console.log("这是经理");
         this.indexlisyt[1].index=true;
+        this.indexlisyt[3].index=true;
         return 2;
       }
       // 如果是超级管理员
@@ -355,9 +408,6 @@ export default {
   transition: all 0.5s;
 }
 
-.changestyle:hover {
-  width: 400px !important;
-}
 
 .el-button {
   background-color: #409eff !important;

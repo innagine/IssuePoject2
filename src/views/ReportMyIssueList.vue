@@ -368,7 +368,7 @@ export default {
         }
       })
         .then((res) => {
-          console.log(res.data.issue[0]);
+          console.log("%%%%%%%%%%%%%%%%%%%%"+res.data.issue[0]);
           this.issue_name = res.data.issue[0].issueName;
           this.issue_id = res.data.issue[0].issueId;
           this.create_man = res.data.issue[0].createMan;
@@ -383,26 +383,6 @@ export default {
         .catch((err) => {
           console.log("error...", err);
         });
-
-      // eslint-disable-next-line no-undef
-      // this.dialogTableVisible = true;
-      // this.$axios({
-      //   method: "post",
-      //   url: "/data/tabledate2.json",
-      //   data: {
-      //     data: {
-      //       tagId: this.tagId,
-      //     },
-      //   },
-      // }).then((response) => {
-      //   console.log(response.data.data);
-      //   this.tagId = response.data.data.tagId;
-      //   // console.log(this.tagId)
-      //   this.gridData[0].tagId = this.tagId;
-      //   this.tag = response.data.data.tag; // 第一种方法
-      //   this.gridData[0].tag = this.tag;
-      //   // 第二种方法. this.gridData[0].tag= response.data.data.dataSchema
-      // });
     },
     //隐藏
     childByValue(show){
