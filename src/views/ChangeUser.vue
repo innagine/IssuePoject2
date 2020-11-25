@@ -83,7 +83,7 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        if (value.length <= 8) {
+        if (value.length < 8) {
           callback(new Error("最少八位密码"));
         } else if (!hasSpecialKey.test(value)) {
           callback(new Error("密码必须包含" + specialKey + "等特殊字符"));
@@ -114,10 +114,10 @@ export default {
       if(reg.test(value)){
         callback(new Error("用户姓名包含非法字符"))
       }
+      callback()
     };
     return {
       ruleForm: {
-        
         userName: "",
         email: "",
         pass: "",
@@ -146,42 +146,44 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      console.log("------------------"+this.userName)
-      axios({
-        method: "post",
-        url: "http://localhost:8999/updateUser",
-        data: {
-          userId:this.User.userId,
-          userName:this.ruleForm.userName,
-          email:this.ruleForm.email,
-          pwd1:this.ruleForm.pass,
-          pwd2:this.ruleForm.checkPass,
-          }
-      })
-        .then((res) => {
-          console.log("data.._________", res.data);
-          
-           this.$notify({
-           title: "消息",
-           message: "用户修改成功",
-           type: "success",
-           });
-          
-        })
-        .catch((err) => {
-          console.log("error...", err);
-        });
-
-
-
-      this.$refs[formName].validate((valid) => {
+      console.log("------------------"+this.ruleForm.userName)
+        this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          axios({
+            method: "post",
+            url: "http://localhost:8999/updateUser",
+            data: {
+              userId:this.User.userId,
+              userName:this.ruleForm.userName,
+              email:this.ruleForm.email,
+              pwd1:this.ruleForm.pass,
+              pwd2:this.ruleForm.checkPass,
+              }
+          })
+            .then((res) => {
+              console.log("data.._________", res.data);
+            console.log('验证通过')
+            this.$notify({
+              title: "消息",
+              message: "用户修改成功",
+              type: "success",
+              });
+              
+            })
+            .catch((err) => {
+              console.log(err)
+
+            });          
         } else {
           console.log("error submit!!");
-          return false;
+          this.$notify({
+              title: "消息",
+              message: "请正确填写用户信息",
+              type: "error",
+              });          
         }
       });
+
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

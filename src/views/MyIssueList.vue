@@ -40,7 +40,18 @@
                 prop="status"
                 label="Issue 状态"
                 show-overflow-tooltip
+                :filters="[{ text: '待解决', value: '待解决' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
+                :filter-method="filterTag"
+                filter-placement="bottom-end"
               >
+              <!-- 'success': -->
+              <!-- :type="(scope.row.auditstatus == '0' ? '' : (scope.row.auditstatus == '1' ? 'success' : (scope.row.auditstatus == '2' ? 'danger' : (scope.row.auditstatus == '3' ? 'warning' : 'danger'))))" -->
+              
+              <template slot-scope="scope">
+                <el-tag
+                  :type="scope.row.status === '关闭' ? 'primary' :  'danger'"
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
               </el-table-column>
               <el-table-column
                 prop="planDate"
@@ -190,7 +201,7 @@
                     size="mini"
                     style="background-color: #409eff !important"
                     @click="
-                      handleModify(
+                      OhandleModify(
                         indexMethod(scope.$index),
                         scope.row.issueId
                       )
@@ -203,7 +214,7 @@
                     size="mini"
                     style="background-color: #f78989 !important"
                     @click="
-                      handleBack(
+                      OhandleBack(
                         scope.row.issueId
                       )   
                     "
@@ -300,7 +311,10 @@ export default {
     indexMethod(index) {
       return (this.currentPage - 1) * this.PageSize + index + 1;
     },
-
+    //标签
+    filterTag(value, row) {
+        return row.status === value;
+    },
     getData(index,pagesize) {
       // console.log(n1,n2);
       axios({
@@ -360,14 +374,26 @@ export default {
       this.showIssueList = false;
       this.showMotify = true;
     },
-    //
 
-    //取修改按钮的数据
-    // handleModify(index, row) {
-    //   this.modify();
-    //   this.modifyId=row,
-    //   console.log(index, row);
-    // },
+    //确认是否关闭ISSUE
+    OhandleModify(index, row) {
+        this.$confirm('此操作将关闭此ISSUE, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.handleModify(index, row);
+          this.$message({
+            type: 'success',
+            message: 'ISSUE关闭'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消关闭'
+          });          
+        });
+      },
     //finish按钮
     handleModify(index, row) {
       console.log(index, row);
@@ -390,6 +416,25 @@ export default {
         
     },
 
+    //确认是否退回ISSUE
+    OhandleBack(row) {
+        this.$confirm('此操作将退回此ISSUE, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.handleBack(row);
+          this.$message({
+            type: 'success',
+            message: 'ISSUE已退回'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消退回'
+          });          
+        });
+      },
     //退回
      handleBack(row) {
       console.log(row);

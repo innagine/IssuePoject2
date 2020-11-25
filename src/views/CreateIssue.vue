@@ -120,7 +120,7 @@ export default {
         desc: "",
       },
       rules: {
-        person:[ { required: true, message: "请输入ISSUE题目", trigger: "blur" },],
+        person:[ { required: true, message: "请输入指派人姓名", trigger: "blur" },],
         name: [
           { required: true, message: "请输入ISSUE题目", trigger: "blur" },
           { min: 8, max: 30, message: "长度在 8 到 30 个字符", trigger: "blur" },
@@ -162,7 +162,11 @@ export default {
   methods: {
 
     submitForm(formName) {
-      console.log("AAAAAAAAAAAA"+this.User.userId);
+      
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+
+          console.log("AAAAAAAAAAAA"+this.User.userId);
       // 发送post请求
           axios({
         method: "post",
@@ -185,14 +189,14 @@ export default {
           if(res.data==1){
           this.$notify({
            title: "消息",
-           message: "IUSSUE创建成功",
+           message: "IUSSUE创建成功，可以继续创建",
            type: "success",
            });
           }
           else{
             this.$notify({
            title: "消息",
-           message: "IUSSUE创建失败",
+           message: "IUSSUE创建失败,指派人不存在",
            type: "warning",
            });
           }
@@ -202,18 +206,13 @@ export default {
         });
 
 
-
-
-
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$notify({
-           title: "消息",
-           message: "请继续创建",
-           type: "success",
-           });
         } else {
           console.log("error submit!!");
+          this.$notify({
+           title: "消息",
+           message: "请将信息填写完整",
+           type: "warning",
+           });
           return false;
         }
       });
