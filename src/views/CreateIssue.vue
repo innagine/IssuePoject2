@@ -24,7 +24,7 @@
             <el-input v-model="ruleForm.person"></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
-          <el-form-item label="影响版本" prop="version" :inline="true">
+          <el-form-item label="影响版本" prop="version" :inline="true" v-model="ruleForm.version">
             <el-input v-model="ruleForm.version"></el-input> </el-form-item
         ></el-col>
       </el-row>
@@ -120,10 +120,18 @@ export default {
         desc: "",
       },
       rules: {
-        person:[ { required: true, message: "请输入指派人姓名", trigger: "blur" },],
+        person:[ { required: true, message: "请输入指派人姓名", trigger: "blur" },
+                 {  max: 30, message: "长度最多 30 个字符", trigger: "blur" },
+        ],
+        version:[ 
+                 {  max: 30, message: "长度最多 30 个字符", trigger: "blur" },
+        ],
+        type2:[ 
+                 {  max: 30, message: "长度最多 30 个字符", trigger: "blur" },
+        ],
         name: [
           { required: true, message: "请输入ISSUE题目", trigger: "blur" },
-          { min: 8, max: 30, message: "长度在 8 到 30 个字符", trigger: "blur" },
+          { min: 8, max: 80, message: "长度在 8 到 80 个字符", trigger: "blur" },
         ],
         region: [
           { required: true, message: "请填写步骤重现", trigger: "change" },

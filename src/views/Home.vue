@@ -16,7 +16,8 @@
       <el-menu-item index="5" @click="Search" v-if="indexlisyt[0].index">高级检索</el-menu-item>
       <el-menu-item index="6" @click="MyIssueList" v-if="indexlisyt[0].index">ISSUE列表</el-menu-item>
       <el-menu-item index="7" @click="TastIssueList" v-if="indexlisyt[0].index">我的任务</el-menu-item>
-      <el-menu-item index="8" class="prevent" v-if="indexlisyt[3].index">
+      <el-menu-item index="8" @click="UserEcharts" v-if="indexlisyt[2].index">用户状态分布</el-menu-item>
+      <el-menu-item index="9" class="prevent" v-if="indexlisyt[3].index">
         <el-input
           v-model="input"
           placeholder="请输入搜索内容"
@@ -25,11 +26,11 @@
         <el-button size="small" @click="GlobalSearch">搜索</el-button>
       </el-menu-item>
 
-      <el-menu-item index="9" style="float: right">
+      <el-menu-item index="10" style="float: right">
         <el-button size="small" @click="Login">注销</el-button>
       </el-menu-item>
-      <el-menu-item index="10" style="float: right" @click="myInfo">{{ name }}</el-menu-item>
-      <el-menu-item index="11" style="float: right" @click="myInfo">
+      <el-menu-item index="11" style="float: right" @click="myInfo">{{ name }}</el-menu-item>
+      <el-menu-item index="12" style="float: right" @click="myInfo">
           <div>
             <el-avatar :src="url"></el-avatar>
           </div>
@@ -45,6 +46,7 @@
     <GlobalSearch v-if="showGlobalSearch" :send="input" ref="global"></GlobalSearch>
     <TastIssueList v-if="showTastIssueList" :User="user"></TastIssueList>
     <MyIssueList  v-if="showMyIssueList" :User="user"></MyIssueList>
+    <user-echarts  v-if="showUserEcharts" :User="user"></user-echarts>
   </div>
 </template>
 
@@ -60,6 +62,7 @@ import Search from "@/views/Search.vue";
 import GlobalSearch from '@/views/GlobalSearch';
 import MyIssueList from '@/views/MyIssueList';
 import TastIssueList from '@/views/TastIssueList';
+import UserEcharts from '@/views/UserEcharts';
 
 // 导入axios
 // import axios from "axios";
@@ -76,7 +79,8 @@ export default {
     Search,
     GlobalSearch,
     MyIssueList,
-    TastIssueList
+    TastIssueList,
+    UserEcharts
     
   },
   data() {
@@ -100,6 +104,7 @@ export default {
       showGlobalSearch:false,
       showTastIssueList:false,
       showMyIssueList:false,
+      showUserEcharts:false,
 
       // 登陆传过来的USER
       user:{}
@@ -167,6 +172,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
     // 创建ISSUE
     createIssue() {
@@ -179,6 +185,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
     // 展示首页
     indexShow() {
@@ -191,6 +198,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
     //查看ISSUE报表
     reportIssue(){
@@ -203,6 +211,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
     //展示个人页面
     myInfo(){
@@ -215,6 +224,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
     //展示高级检索页面
     Search(){
@@ -227,6 +237,7 @@ export default {
       this.showGlobalSearch=false
       this.showTastIssueList=false
       this.showMyIssueList=false
+      this.showUserEcharts=false
     },
 
     //展示全局搜索
@@ -240,6 +251,7 @@ export default {
       this.showTastIssueList=false
       this.showMyIssueList=false
       this.showGlobalSearch=true
+      this.showUserEcharts=false
       this.$refs.global.getData();
     },
 
@@ -254,6 +266,7 @@ export default {
       this.showTastIssueList=false
       this.showMyIssueList=true
       this.showGlobalSearch=false
+      this.showUserEcharts=false
     },
 
     
@@ -268,7 +281,22 @@ export default {
       this.showTastIssueList=true
       this.showMyIssueList=false
       this.showGlobalSearch=false
+      this.showUserEcharts=false
     },
+    //展示用户状态分布
+    UserEcharts(){
+      this.showReportIssue=false;
+      this.show=false;
+      this.showCreateIssue=false;
+      this.showAccountInquiry=false;
+      this.showMyInfo=false;
+      this.showSearch=false;
+      this.showTastIssueList=false
+      this.showMyIssueList=false
+      this.showGlobalSearch=false
+      this.showUserEcharts=true
+    },
+
 
     // 选择回传，子传父值，传回选择的事项
     FromSon(data) {

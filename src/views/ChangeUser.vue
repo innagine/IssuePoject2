@@ -21,7 +21,9 @@
       </el-form-item>
       <el-form-item prop="email" label="邮箱">
         <el-input v-model="ruleForm.email"
-         @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
+         @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
+         maxlength="30"
+         show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input

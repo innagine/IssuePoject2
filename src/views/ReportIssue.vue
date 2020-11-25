@@ -157,7 +157,8 @@ export default {
           if(this.userList[i].rate=='NaN'){
             this.userList[i].rate=0
           }
-          this.userList[i].rate=Math.round(this.userList[i].rate*10000)/100+"%"
+          this.userList[i].rate=Math.round(this.userList[i].rate*100)+"%"
+
         }
       }
 

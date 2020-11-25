@@ -48,7 +48,7 @@
         </el-table-column>
 
         <!-- 修改issue数 -->
-        <el-table-column prop="aNum" label="修改issue数" width="180">
+        <el-table-column prop="aNum" label="关闭issue数" width="180">
           <template slot-scope="scope">
             <a href="#" @click='gotoMyIssueList(scope.row.userId,scope.row.userName,3)'>
               {{scope.row.aNum}}

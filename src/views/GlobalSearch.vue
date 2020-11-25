@@ -8,9 +8,7 @@
             <!-- 表格属性设置 -->
             <el-table
               ref="multipleTable"
-              :data="
-                tableData
-              "
+              :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
               tooltip-effect="dark"
               style="width: 100%"
               
@@ -40,7 +38,15 @@
                 prop="status"
                 label="Issue 状态"
                 show-overflow-tooltip
+                :filters="[{ text: '待修改', value: '待修改' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
+                :filter-method="filterTag"
+                filter-placement="bottom-end"
               >
+              <template slot-scope="scope">
+                <el-tag
+                  :type="scope.row.status === '待修改' ? 'primary' : (scope.row.status === '待验证' ? 'danger':'success') "
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
               </el-table-column>
               <el-table-column
                 prop="planDate"
@@ -375,7 +381,11 @@ export default {
       console.log("@@@@@@@@@@"+show+"*********");
       this.showIssueList = show.showIssueList;
       this.showMotify = show.showMotify;
-    }
+    },
+    //标签
+    filterTag(value, row) {
+        return row.status === value;
+    },
   },
   created: function () {
     this.getData(this.currentPage);

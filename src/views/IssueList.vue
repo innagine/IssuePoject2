@@ -8,9 +8,8 @@
             <!-- 表格属性设置 -->
             <el-table
               ref="multipleTable"
-              :data="
-                tableData
-              "
+              :data="tableData"
+              
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="handleSelectionChange"
@@ -415,7 +414,7 @@ export default {
     
         
     },
-
+    
     // 分页
     // 每页显示的条数
     handleSizeChange(val) {

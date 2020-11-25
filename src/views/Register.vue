@@ -27,7 +27,9 @@
           </el-form-item>
           <el-form-item prop="email" >
             <el-input v-model="ruleForm.email" placeholder="请输入邮箱"
-            @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"></el-input>
+            @keyup.native="$event.target.value = $event.target.value.replace(/^\s+|\s+$/gm,'')"
+            maxlength="30"
+            show-word-limit></el-input>
           </el-form-item>
           <el-form-item  prop="pass">
             <el-input
@@ -267,16 +269,12 @@ export default {
 .el-card {
   align-self: center;
   /* padding: 30px; */
-}
-
-.register .el-input {
-  padding: 5px 0;
+  width: 100% !important;
 }
 
 .btn {
   font-size: 16px;
   /*margin: 15px auto;*/
-  padding: 10px 0;
   text-align: center;
   width: 100%;
   background-image: linear-gradient(to right, #51a4db, #a8e4fa);

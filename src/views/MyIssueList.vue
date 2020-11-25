@@ -44,7 +44,6 @@
                 :filter-method="filterTag"
                 filter-placement="bottom-end"
               >
-              
               <template slot-scope="scope">
                 <el-tag
                   :type="scope.row.status === '待修改' ? 'primary' : (scope.row.status === '待验证' ? 'danger':'success') "
