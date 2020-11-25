@@ -19,7 +19,7 @@
               <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
               </el-table-column>
-              <el-table-column prop="issueId" label="Issue ID">
+              <el-table-column prop="issueId" label="Issue ID" >
               </el-table-column>
               <el-table-column prop="createMan" label="Issue 创建人">
               </el-table-column>
@@ -46,6 +46,7 @@
                 label="预计完成时间"
                 show-overflow-tooltip
               >
+              <!--this.update_date = this.formateDate(res.data.issue[0].planDate);-->
               </el-table-column>
               <el-table-column
                 prop="finalDate"
@@ -174,6 +175,15 @@
                             }}</el-input>
                           </el-col>
                         </el-form-item>
+                        <el-form-item label="修改方案">
+                          <el-input
+                            type="textarea"
+                            autosize
+                            readonly
+                            v-model="modifyA"
+                            >{{ modifyA }}</el-input
+                          >
+                        </el-form-item>
                       </el-form>
                     </div>
                   </el-dialog>
@@ -254,11 +264,13 @@ export default {
       final_date: "",
       step:"",
       level: "",
+      modifyA:"",
       dialogTableVisible: false,
       dialogFormVisible: false,
       formLabelWidth: "120px",
       //缓存修改issue的id
       modifyId:"",
+      
     };
   },
   methods: {
@@ -297,9 +309,19 @@ export default {
         }
       })
         .then((res) => {
-          console.log("+++++++++++"+res.data);
+          
+          console.log("22222+++++++++++"+res.data.issue[0]);
           // 将数据赋值给tableData
+          // for(let i=0;i<res.data.issue.length;i++){
+          //   res.data.issue[i].planDate=this.formateDate(res.data.issue[i].planDate);
+          //   res.data.issue[i].createDate=this.formateDate(res.data.issue[i].createDate);
+          //   res.data.issue[i].finalDate=this.formateDate(res.data.issue[i].finalDate);
+          //   res.data.issue[i].updateDate=this.formateDate(res.data.issue[i].updateDate);
+          //   console.log(res.data.issue[i]);
+          //   console.log(i);
+          // }
           this.tableData = res.data.issue;
+          // this.tableData = 
           // 将数据的长度赋值给totalCount
           this.totalCount = res.data.total;
           this.currentPage=index;
@@ -368,17 +390,18 @@ export default {
         }
       })
         .then((res) => {
-          console.log("%%%%%%%%%%%%%%%%%%%%"+res.data.issue[0]);
+          console.log("%%%%%%%%%%%%%%%%%%%%"+res.data.issue[0].planDate);
           this.issue_name = res.data.issue[0].issueName;
           this.issue_id = res.data.issue[0].issueId;
           this.create_man = res.data.issue[0].createMan;
           this.beta = res.data.issue[0].beta;
           this.create_date = res.data.issue[0].createDate;
-          this.update_date = res.data.issue[0].updateDate;
+          this.update_date = res.data.issue[0].planDate;
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
+          this.modifyA = res.data.issue[0].solution;
           this.level = res.data.issue[0].level;
-          this.getData(this.currentPage);
+          this.getData(this.currentPage,20);
         })
         .catch((err) => {
           console.log("error...", err);
@@ -389,11 +412,37 @@ export default {
       console.log("@@@@@@@@@@"+show+"*********");
       this.showIssueList = show.showIssueList;
       this.showMotify = show.showMotify;
-    }
+    },
+    //时间戳格式化
+    // formateDate(date) {
+    // const arr = date.split('T');
+    // const d = arr[0];
+    // const darr = d.split('-');
+
+    // const t = arr[1];
+    // const tarr = t.split('.000');
+    // const marr = tarr[0].split(':');
+
+    // const dd =
+    //   parseInt(darr[0]) +
+    //   '-' +
+    //   parseInt(darr[1]) +
+    //   '-' +
+    //   parseInt(darr[2]) +
+    //   ' ' +
+    //   parseInt(marr[0]) +
+    //   ':' +
+    //   parseInt(marr[1]) +
+    //   ':' +
+    //   parseInt(marr[2]);
+    // return dd;
+    // }
+
+
   },
   created: function () {
     this.getData(this.currentPage,20);
-    console.log("1287313817313+++++++"+this.userId)
+    // console.log("1287313817313+++++++"+this.userId)
   },
 };
 </script>

@@ -84,6 +84,7 @@ export default {
         }).then(res=>{
           this.total=res.data.total;
           this.userList=res.data.statistics;
+          this.formatRate()
         }).catch(Error=>{
           console.log(Error);
         })
@@ -100,6 +101,7 @@ export default {
           this.userName=userName;
           this.pageIndex=1;
           console.log(this.userList)
+          this.formatRate()
       },
       /**
        * 从子组件中获取分页信息：
@@ -148,7 +150,18 @@ export default {
         this.showTastIssue=false;
         this.showButton=false
         this.showFinish=false
+      },
+
+      formatRate(){
+        for(var i=0;i<this.userList.length;i++){
+          if(this.userList[i].rate=='NaN'){
+            this.userList[i].rate=0
+          }
+          this.userList[i].rate=Math.round(this.userList[i].rate*10000)/100+"%"
+        }
       }
+
+
     },
     created(){
         //在被创建后获取初始数据                      

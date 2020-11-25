@@ -20,6 +20,10 @@
             <i class="el-icon-setting"></i>
             <span slot="title">我的信息</span>
           </el-menu-item>
+          <el-menu-item index="4" @click="ShowTastEcharts">
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">任务进度</span>
+          </el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="21">
@@ -27,6 +31,7 @@
         <IssueModify v-if="showIssueModify"></IssueModify>
         <ChangeUser v-if="showChangerUser" :User="this.User"></ChangeUser>
         <TastIssueList v-if="showTastIssueList" :User="this.User"></TastIssueList>
+        <tast-echarts v-if="showTastEcharts" :User="this.User"></tast-echarts>
       </el-col>
     </el-row>
   </div>
@@ -38,6 +43,7 @@ import MyIssueList from '@/views/MyIssueList';
 import IssueModify from '@/views/IssueModify';
 import ChangeUser from '@/views/ChangeUser';
 import TastIssueList from '@/views/TastIssueList';
+import TastEcharts from '@/views/TastEcharts';
 
 
 
@@ -51,7 +57,8 @@ export default {
     MyIssueList,
     IssueModify,
     ChangeUser,
-    TastIssueList
+    TastIssueList,
+    TastEcharts
   },
   
   data() {
@@ -59,7 +66,8 @@ export default {
       showIssueList:true,
       showIssueModify:false,
       showChangerUser:false,
-      showTastIssueList:false
+      showTastIssueList:false,
+      showTastEcharts:false,
     };
   },
 
@@ -80,6 +88,7 @@ export default {
       this.showIssueModify=false
       this.showChangerUser=false
       this.showTastIssueList=false
+      this.showTastEcharts=false
       // console.log("---------------------------------"+this.User)
     },
     //展示Issue修改页面
@@ -88,6 +97,7 @@ export default {
       this.showIssueModify=true
       this.showChangerUser=false
       this.showTastIssueList=false
+      this.showTastEcharts=false
     },
     //展示用户信息页面
     ShowChangerUser(){
@@ -95,12 +105,23 @@ export default {
       this.showIssueModify=false
       this.showChangerUser=true
       this.showTastIssueList=false
+      this.showTastEcharts=false
     },
+    //展示任务列表
     ShowTastIssueList(){
       this.showIssueList=false
       this.showIssueModify=false
       this.showChangerUser=false
       this.showTastIssueList=true
+      this.showTastEcharts=false
+    },
+    // 展示任务图表
+    ShowTastEcharts(){
+      this.showIssueList=false
+      this.showIssueModify=false
+      this.showChangerUser=false
+      this.showTastIssueList=false
+      this.showTastEcharts=true
     }
   },
 };
