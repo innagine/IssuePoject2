@@ -56,6 +56,9 @@
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')" class="btn">注册</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="login" class="btn">返回登陆</el-button>
+          </el-form-item>
         </el-form>
       </el-card>
     </div>
@@ -120,12 +123,14 @@ export default {
       if(reg.test(value)){
         callback(new Error("用户姓名包含非法字符"))
       }
+      callback()
     };
     var validateId=(rule,value,callback)=>{
       var _reg=/[^a-zA-Z0-9]/;
       if(_reg.test(value)){
         callback(new Error("用户ID包含非法字符"))
       }
+      callback()
     }
     return {
       ruleForm: {
@@ -167,16 +172,9 @@ export default {
   },
 
   methods: {
-    submitForm() {
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
-
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
       // 发送post请求，请求注册
       axios({
         method: "post",
@@ -231,11 +229,22 @@ export default {
         })
         .catch((err) => {
           console.log("error...", err);
-        });
-
-
+        });          
+        } else {
+          console.log("error submit!!");
+         this.$notify({
+           title: "消息",
+           message: "请正确填写用户信息",
+           type: "warning",
+           });
+        }
+      });
     },
-    
+    login(){
+            this.$router.push({
+              path: "/",
+            });      
+    }
   },
 };
 </script>
@@ -266,7 +275,7 @@ export default {
 
 .btn {
   font-size: 16px;
-  margin: 15px auto;
+  /*margin: 15px auto;*/
   padding: 10px 0;
   text-align: center;
   width: 100%;

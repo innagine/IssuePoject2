@@ -30,10 +30,6 @@ import axios from "axios";
 
 export default {
   
-  // name: "issueModify",
-  // components: {
-  //   IssueList,
-  // },
   props: ['modifyId'],
   data() {
     return {
@@ -62,18 +58,19 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           axios({
-        method: "post",
-        url: "http://localhost:8999/updateSolotion",
-        data: {solution :this.ruleForm.desc,issueId:this.modifyId},
+            method: "post",
+            url: "http://localhost:8999/updateSolotion",
+            data: {solution :this.ruleForm.desc,issueId:this.modifyId},
       })
         .then((res) => {
           console.log(res.data);
+          this.$parent.getData(1,20);
+          this.$message('提交修改成功');
           this.back();
         })
         .catch((Error) => {
           console.log(Error);
         });
-          alert("submit!");
           
         } else {
           console.log("error submit!!");

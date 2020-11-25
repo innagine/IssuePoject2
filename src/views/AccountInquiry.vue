@@ -84,7 +84,15 @@
               prop="status"
               label="账户状态"
               show-overflow-tooltip
+              :filters="[{ text: '激活', value: '激活' }, { text: '注销', value: '注销' }]"
+              :filter-method="filterTag"
+              filter-placement="bottom-end"
             >
+            <template slot-scope="scope">
+                <el-tag
+                  :type="scope.row.status === '激活' ? 'success' : 'danger'"
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
@@ -93,14 +101,14 @@
                   size="mini"
                   type="danger"
                   @click="
-                    handleDelete(scope.row)
+                    OhandleDelete(scope.row)
                   "
                   v-if="scope.row.status !== '注销'"
                   >注销</el-button
                 >
                 <el-button
                   size="mini"
-                  @click="handleEdit(scope.row)"
+                  @click="OhandleEdit(scope.row)"
                   v-if="
                     scope.row.identity !== '经理' && scope.row.status !== '注销'
                   "
@@ -226,8 +234,6 @@ export default {
           this.tableData = res[0].data.users;
           this.totalCount = res[0].data.total;
           console.log("__________________"+this.tableData);
-          // this.tableData = res.data;
-          // this.totalCount = res.data.total;
           
         })
         .catch((Error) => {
@@ -279,12 +285,27 @@ export default {
       // 切换页码时，要获取每页显示的条数
       this.getData(this.currentPage);
     },
-
+    //确认是否将该员工提升为经理
+    OhandleEdit(row){
+        this.$confirm('此操作将该员工设为经理, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.handleEdit(row);
+          this.$message({
+            type: 'success',
+            message: '已将员工设为经理'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消设为经理'
+          });          
+        });
+      },
     //修改员工身份数据
     handleEdit(row) {
-      // this.manager.identity="经理";
-      // this.manager.user_id=row.user_id;
-      // this.manager.pageIndex=this.currentPage;
       axios({
         method: "post",
         url: "http://localhost:8999/UpdateAuthority",
@@ -299,30 +320,29 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      // axios({
-      //   method: "post",
-      //   url: "/data/tabledate.json",
-      //   data: this.manager,
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     this.tableData = res.data;
-      //     this.totalCount = res.data.length;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      
     },
-
+    //确认是否注销账号
+    OhandleDelete(row){
+        this.$confirm('此操作将注销此账号, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.handleDelete(row);
+          this.$message({
+            type: 'success',
+            message: '账号注销成功'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消注销'
+          });          
+        });
+      },
     //注销账号
     handleDelete(row) {
-      // console.log(row);
-      // console.log(row.userId);
-
-      // this.logout.status="注销";
-      // this.logout.user_id=row.user_id;
-      // this.logout.pageIndex=this.currentPage;    
-      
       axios({
         method: "post",
         url: "http://localhost:8999/cancellationUser",
@@ -338,6 +358,10 @@ export default {
           console.log(err);
         });
         
+    },
+    //标签
+    filterTag(value, row) {
+        return row.status === value;
     },
   },
   created: function () {

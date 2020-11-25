@@ -40,7 +40,15 @@
                 prop="status"
                 label="Issue 状态"
                 show-overflow-tooltip
+                :filters="[{ text: '待修改', value: '待修改' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
+                :filter-method="filterTag"
+                filter-placement="bottom-end"
               >
+                <template slot-scope="scope">
+                <el-tag
+                  :type="scope.row.status === '待修改' ? 'primary' : (scope.row.status === '待验证' ? 'danger':'success') "
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
               </el-table-column>
               <el-table-column
                 prop="planDate"
@@ -70,7 +78,6 @@
                     >详情</el-button
                   >
                   <!-- 弹窗内容 -->
-                  <!-- indexMethod(scope.$index), -->
                   <el-dialog
                     title="ISSUE详情"
                     :visible.sync="dialogTableVisible"
@@ -187,17 +194,7 @@
                       </el-form>
                     </div>
                   </el-dialog>
-                  <!-- <el-button
-                    size="mini"
-                    @click="
-                      handleModify(
-                        indexMethod(scope.$index),
-                        scope.row.issueId
-                      )
-                    "
-                    v-if="scope.row.status!=='关闭'"
-                    >finsh</el-button
-                  > -->
+                  
                   <el-button
                     size="mini"
                     @click="
@@ -206,6 +203,7 @@
                         scope.row.issueId
                       )
                     "
+                    v-if="scope.row.status!=='关闭'"
                     >修改</el-button
                   >
                 </template>
@@ -228,7 +226,7 @@
         </el-footer>
       </el-container>
     </div>
-    <IssueModify v-if="showMotify" :modifyId="modifyId" v-on:childByValue="childByValue"></IssueModify>
+    <IssueModify v-if="showMotify" :modifyId="modifyId" v-on:childByValue="childByValue" ></IssueModify>
   </div>
 </template>
 
@@ -299,28 +297,13 @@ export default {
     indexMethod(index) {
       return (this.currentPage - 1) * this.PageSize + index + 1;
     },
-    //查询提交
-    // onSubmit() {
-    //   /* json格式提交： */
-    //   let formData = JSON.stringify(this.form);
-    //   axios({
-    //     method: "post",
-    //     url: "xxxxxxx",
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //     withCredentials: true,
-    //     data: formData,
-    //   }).then((res) => {
-    //     this.tableData = res.data;
-    //     console.log(res);
-    //   });
-    //   console.log("submit!");
-    //   console.log(this.form);
-    // },
+
+    //标签
+    filterTag(value, row) {
+        return row.status === value;
+    },
 
     getData(index,pagesize) {
-      // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.User.userName);
       axios({
         method: "post",
         url: "http://localhost:8999/searchIssue",
@@ -382,34 +365,6 @@ export default {
       console.log(index, row);
     },
 
-    // handleModify(index, row) {
-    //   console.log(index, row);
-    //    axios({
-    //     method: "post",
-    //     url: "http://localhost:8999/finish",
-    //     // params:{issueId:row}
-    //     data:{
-    //       issueId:row,
-    //     }
-    //   })
-    //     .then((res) => {
-    //       console.log(".........."+res.data);
-    //       // 将数据赋值给tableData
-    //       // this.tableData = res.data.issue;
-    //       // 将数据的长度赋值给totalCount
-    //       // this.totalCount = res.data.issue.length;
-    //       // console.log(this.tableData);
-    //       // console.log(this.totalCount);
-    //       // this.getData(this.currentPage);
-    //     })
-    //     .catch((err) => {
-    //       console.log("error...", err);
-    //       console.log("..........+++++++");
-    //     });
-    //     this.getData(this.currentPage);
-    // },
-
-
     //取详情按钮的数据index, row
     handleDelete(n) {
       console.log(n);
@@ -448,7 +403,7 @@ export default {
           this.step = res.data.issue[0].step;
           this.level = res.data.issue[0].level;
           this.modifyA = res.data.issue[0].solution;
-          this.getData(this.currentPage);
+          this.getData(this.currentPage,20);
         })
         .catch((err) => {
           console.log("error...", err);

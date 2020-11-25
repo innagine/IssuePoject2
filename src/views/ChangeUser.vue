@@ -118,8 +118,8 @@ export default {
     };
     return {
       ruleForm: {
-        userName: "",
-        email: "",
+        userName: this.User.userName,
+        email:this.User.email,
         pass: "",
         checkPass: "",
       },
@@ -146,7 +146,8 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      console.log("------------------"+this.ruleForm.userName)
+      console.log(this.User)
+      // console.log("------------------"+this.ruleForm.userName)
         this.$refs[formName].validate((valid) => {
         if (valid) {
           axios({
@@ -163,12 +164,21 @@ export default {
             .then((res) => {
               console.log("data.._________", res.data);
             console.log('验证通过')
-            this.$notify({
-              title: "消息",
-              message: "用户修改成功",
-              type: "success",
-              });
-              
+            // this.$notify({
+            //   title: "消息",
+            //   message: "用户信息修改成功",
+            //   type: "success",
+            //   });
+            this.$message({
+              message:'修改成功！正在跳转到登陆页面',
+              type:'success',
+              duration:2000
+              })
+
+            window.setTimeout(()=>{
+                this.login()
+            },2000)
+            
             })
             .catch((err) => {
               console.log(err)
@@ -179,16 +189,21 @@ export default {
           this.$notify({
               title: "消息",
               message: "请正确填写用户信息",
-              type: "error",
+              type: "warning",
               });          
         }
       });
-
     },
+  login(){
+      this.$router.push({
+        path: "/",
+      });
+  },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
   },
+
 };
 </script>
 <style lang="scss" scoped>

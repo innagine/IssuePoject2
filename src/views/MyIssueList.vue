@@ -40,16 +40,14 @@
                 prop="status"
                 label="Issue 状态"
                 show-overflow-tooltip
-                :filters="[{ text: '待解决', value: '待解决' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
+                :filters="[{ text: '待修改', value: '待修改' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
                 :filter-method="filterTag"
                 filter-placement="bottom-end"
               >
-              <!-- 'success': -->
-              <!-- :type="(scope.row.auditstatus == '0' ? '' : (scope.row.auditstatus == '1' ? 'success' : (scope.row.auditstatus == '2' ? 'danger' : (scope.row.auditstatus == '3' ? 'warning' : 'danger'))))" -->
               
               <template slot-scope="scope">
                 <el-tag
-                  :type="scope.row.status === '关闭' ? 'primary' :  'danger'"
+                  :type="scope.row.status === '待修改' ? 'primary' : (scope.row.status === '待验证' ? 'danger':'success') "
                   disable-transitions>{{scope.row.status}}</el-tag>
               </template>
               </el-table-column>
