@@ -339,7 +339,9 @@ export default {
           this.tableData = res.data.issue;
           // console.log(res.data.issue);
           // 将数据的长度赋值给totalCount
-          this.totalCount = res.data.total;
+          // d.setDate(d.getDate()+days);
+          // console.log("999999"+this.tableData[0].planDate.setDate(this.tableData[0].planDate.getDate()+2));
+          this.totalCount = res.data.total; 
           // console.log("(((((((((((("+res.data.total);
           this.currentPage=index;
           // console.log(this.tableData);
