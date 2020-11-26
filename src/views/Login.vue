@@ -77,7 +77,7 @@ export default {
       // 发送get请求，请求用户匹配
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/login",
+        url: "http://localhost:8999/login",
         data: {userId:this.account,password:this.password}
       })
         .then((res) => {

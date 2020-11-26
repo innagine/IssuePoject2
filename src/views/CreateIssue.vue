@@ -191,7 +191,7 @@ export default {
       // 发送post请求
           axios({
         method: "post",
-        url: "http://192.168.1.57:8999/createIssue",
+        url: "http://localhost:8999/createIssue",
         data: {
           issueName:this.ruleForm.name,
           createMan:this.User.userName,

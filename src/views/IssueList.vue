@@ -336,7 +336,7 @@ export default {
       this.search.date4=this.ruleForm.date4,
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/searchIssue",
+        url: "http://localhost:8999/searchIssue",
         data:{
           userId:null,
           issueId:this.ruleForm.issueId,
@@ -376,7 +376,7 @@ export default {
 
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/searchIssue",
+        url: "http://localhost:8999/searchIssue",
         data:{
           userId:null,
           issueId:this.search.issueId,
@@ -448,7 +448,7 @@ export default {
       this.dialogTableVisible = true;
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/searchIssue",
+        url: "http://localhost:8999/searchIssue",
         data:{
             
           issueId: n,

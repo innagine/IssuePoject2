@@ -308,7 +308,7 @@ export default {
     getData(index,pagesize) {
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/searchIssue",
+        url: "http://localhost:8999/searchIssue",
         data:{
           userId:null,
           issueId:0,
@@ -379,7 +379,7 @@ export default {
       console.log("+++++++++++++++++++++"+n)
       axios({
         method: "post",
-        url: "http://192.168.1.57:8999/searchIssue",
+        url: "http://localhost:8999/searchIssue",
         data:{
           issueId: n,
           status:null,

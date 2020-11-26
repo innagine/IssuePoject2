@@ -63,7 +63,7 @@ export default {
                     { validator: validateUserName, trigger: 'blur' }
                 ]
             },
-            url:'http://192.168.1.57:8999/searchIssueByuser',    //资源标识
+            url:'http://localhost:8999/searchIssueByuser',    //资源标识
             userList:[],    //页数据
             total:0,
         }
