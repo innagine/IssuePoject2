@@ -311,15 +311,7 @@ export default {
         .then((res) => {
           
           console.log("22222+++++++++++"+res.data.issue[0]);
-          // 将数据赋值给tableData
-          // for(let i=0;i<res.data.issue.length;i++){
-          //   res.data.issue[i].planDate=this.formateDate(res.data.issue[i].planDate);
-          //   res.data.issue[i].createDate=this.formateDate(res.data.issue[i].createDate);
-          //   res.data.issue[i].finalDate=this.formateDate(res.data.issue[i].finalDate);
-          //   res.data.issue[i].updateDate=this.formateDate(res.data.issue[i].updateDate);
-          //   console.log(res.data.issue[i]);
-          //   console.log(i);
-          // }
+          
           this.tableData = res.data.issue;
           // this.tableData = 
           // 将数据的长度赋值给totalCount
@@ -400,6 +392,15 @@ export default {
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
           this.modifyA = res.data.issue[0].solution;
+          if(res.data.issue[0].level==1){
+            res.data.issue[0].level="低";
+          }else if(res.data.issue[0].level==2){
+            res.data.issue[0].level="一般";
+          }else if(res.data.issue[0].level==3){
+            res.data.issue[0].level="较高";
+          }else if(res.data.issue[0].level==4){
+            res.data.issue[0].level="最高";
+          }
           this.level = res.data.issue[0].level;
           this.getData(this.currentPage,20);
         })

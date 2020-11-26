@@ -55,6 +55,7 @@
               type="date"
               placeholder="选择日期"
               v-model="ruleForm.date"
+              :picker-options="pickerOptions"
               style="width: 100%"
             ></el-date-picker>
           </el-form-item>
@@ -103,6 +104,12 @@ export default {
   props:['User'],
   data() {
     return {
+       pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() < Date.now();
+          },
+      },
+
       ruleForm: {
         name: "",
         id: "",

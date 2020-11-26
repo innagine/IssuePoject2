@@ -78,7 +78,7 @@
       <el-form-item label="Issue状态" prop="status">
         <el-select v-model="ruleForm.status" placeholder="请选择Issue状态">
           <el-option label="待修改" value="待修改"></el-option>
-          <el-option label="已完成" value="已完成"></el-option>
+          <el-option label="关闭" value="关闭"></el-option>
           <el-option label="待验证" value="待验证"></el-option>
         </el-select>
       </el-form-item>
@@ -93,7 +93,7 @@
     </div>
     </el-collapse-transition>
      <el-button @click="show3 = !show3" v-if="!show3"  style="margin: 0 20px">展开</el-button>
-    <IssueList :issueObj="issueObj" ref="child" v-if="showIssueList"></IssueList>
+    <IssueList :ruleForm="ruleForm" ref="child"></IssueList>
     </div>
 </template>
 
@@ -115,7 +115,7 @@ export default {
       showIssueList:false,
       ruleForm: {
         
-        iusseId:'',
+        iusseId:null,
         createMan: null,
         updateMan: null,
         date1: null,
@@ -166,7 +166,6 @@ export default {
       this.showIssueList=true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.issueObj=this.ruleForm;
           this.$refs.child.getData();
           this.$notify({
            title: "消息",
@@ -179,7 +178,7 @@ export default {
         }
       });
       // this.$refs.child.getData();
-      this.resetForm(formName);
+      // this.resetForm(formName);
     },
     
     resetForm(formName) {

@@ -227,7 +227,7 @@ import IssueModify from "@/views/IssueModify.vue";
 
 //表格
 export default {
-  props:['issueObj'],
+  props:['ruleForm'],
 
   name: "issuelist",
   components: {
@@ -314,10 +314,10 @@ export default {
     
 
     getData(n1,n2) {
-      // console.log(this.issueObj.issueId);
-      if(!this.issueObj.issueId){
-        this.issueObj.issueId=0;
-        console.log("++++++"+this.issueObj.issueId);
+      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+this.ruleForm.issueId);
+      if(!this.ruleForm.issueId){
+        this.ruleForm.issueId=null;
+        console.log("++++++"+this.ruleForm.issueId);
       }
       // console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
       // console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
@@ -328,28 +328,28 @@ export default {
           n2=1
       }
       // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.issueObj.createMan);
-      this.search.issueId=this.issueObj.issueId,
+      this.search.issueId=this.ruleForm.issueId,
       // console.log("N999@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-      this.search.status=this.issueObj.status,
-      this.search.createMan=this.issueObj.createMan,
-      this.search.updateMan=this.issueObj.updateMan,
-      this.search.createDate=this.issueObj.date1,
-      this.search.updateDate=this.issueObj.date3,
-      this.search.date2=this.issueObj.date2,
-      this.search.date4=this.issueObj.date4,
+      this.search.status=this.ruleForm.status,
+      this.search.createMan=this.ruleForm.createMan,
+      this.search.updateMan=this.ruleForm.updateMan,
+      this.search.createDate=this.ruleForm.date1,
+      this.search.updateDate=this.ruleForm.date3,
+      this.search.date2=this.ruleForm.date2,
+      this.search.date4=this.ruleForm.date4,
       axios({
         method: "post",
         url: "http://localhost:8999/searchIssue",
         data:{
           userId:null,
-          issueId:this.search.issueId,
-          status:this.issueObj.status,
-          createMan:this.issueObj.createMan,
-          updateMan:this.issueObj.updateMan,
-          createDate:this.issueObj.date1,
-          updateDate:this.issueObj.date3,
-          date2:this.issueObj.date2,
-          date4:this.issueObj.date4,
+          issueId:this.ruleForm.issueId,
+          status:this.ruleForm.status,
+          createMan:this.ruleForm.createMan,
+          updateMan:this.ruleForm.updateMan,
+          createDate:this.ruleForm.date1,
+          updateDate:this.ruleForm.date3,
+          date2:this.ruleForm.date2,
+          date4:this.ruleForm.date4,
           pageIndex:n2,
           pageSize:n1   
         }
@@ -370,11 +370,11 @@ export default {
 
     getDataA(n1,n2) {
       console.log("N4@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-      if(this.search.issueId===undefined){
-        this.search.issueId=0;
-      }
-      console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
-      console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
+      // if(this.search.issueId===undefined){
+      //   this.search.issueId=0;
+      // }
+      // console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
+      // console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
       if(n1==undefined){
           n1=20;
       }
@@ -382,7 +382,7 @@ export default {
           n2=1
       }
       // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.issueObj.createMan);
-      console.log("N3@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
+      // console.log("N3@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
 
       axios({
         method: "post",
@@ -393,8 +393,8 @@ export default {
           status:this.search.status,
           createMan:this.search.createMan,
           updateMan:this.search.updateMan,
-          createDate:this.search.date1,
-          updateDate:this.search.date3,
+          createDate:this.search.createDate,
+          updateDate:this.search.updateDate,
           date2:this.search.date2,
           date4:this.search.date4,
           pageIndex:n2,
@@ -418,7 +418,7 @@ export default {
     // 分页
     // 每页显示的条数
     handleSizeChange(val) {
-      console.log(val);
+      console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+val);
       // 改变每页显示的条数
       this.PageSize = val;
       // 点击每页显示的条数时，显示第一页
@@ -450,7 +450,7 @@ export default {
     handleDelete(n) {
       console.log(n);
       this.getTagDetail(n);
-    console.log("++++++++++++++++++++++++++++++++++++++++++++++"+this.issueObj.issueId);
+    // console.log("++++++++++++++++++++++++++++++++++++++++++++++"+this.issueObj.issueId);
 
     },
     //弹窗
@@ -483,6 +483,15 @@ export default {
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
           this.modifyA = res.data.issue[0].solution;
+          if(res.data.issue[0].level==1){
+            res.data.issue[0].level="低";
+          }else if(res.data.issue[0].level==2){
+            res.data.issue[0].level="一般";
+          }else if(res.data.issue[0].level==3){
+            res.data.issue[0].level="较高";
+          }else if(res.data.issue[0].level==4){
+            res.data.issue[0].level="最高";
+          }
           this.level = res.data.issue[0].level;
         })
         .catch((err) => {
@@ -491,7 +500,7 @@ export default {
     },
     //隐藏
     childByValue(show){
-      console.log("@@@@@@@@@@"+show+"*********");
+      // console.log("@@@@@@@@@@"+show+"*********");
       this.showIssueList = show.showIssueList;
       this.showMotify = show.showMotify;
     }

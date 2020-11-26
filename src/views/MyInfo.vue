@@ -8,6 +8,15 @@
           @open="handleOpen"
           @close="handleClose"
         >
+        <!-- if(res.data.issue[0].level==1){
+            res.data.issue[0].level="低";
+          }else if(res.data.issue[0].level==2){
+            res.data.issue[0].level="一般";
+          }else if(res.data.issue[0].level==3){
+            res.data.issue[0].level="较高";
+          }else if(res.data.issue[0].level==4){
+            res.data.issue[0].level="最高";
+          } -->
           <el-menu-item index="1" @click="ShowIssueList">
             <i class="el-icon-menu"></i>
             <span slot="title">ISSUE列表</span>

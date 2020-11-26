@@ -27,31 +27,31 @@
               <el-table-column
                 prop="createDate"
                 label="创建时间"
-                show-overflow-tooltip
+                
               >
               </el-table-column>
               <el-table-column
                 prop="updateMan"
                 label="修改人"
-                show-overflow-tooltip
+                
               >
               </el-table-column>
               <el-table-column
                 prop="status"
                 label="Issue 状态"
-                show-overflow-tooltip
+                
               >
               </el-table-column>
               <el-table-column
                 prop="planDate"
                 label="预计完成时间"
-                show-overflow-tooltip
+                
               >
               </el-table-column>
               <el-table-column
                 prop="finalDate"
                 label="实际完成时间"
-                show-overflow-tooltip
+                
               >
               </el-table-column>
               <el-table-column label="操作" width="150px">
@@ -72,8 +72,10 @@
                   <el-dialog
                     title="ISSUE详情"
                     :visible.sync="dialogTableVisible"
+                    destroy-on-close
+                    v-if="dialogTableVisible"
                   >
-                    <div class="Detail">
+                    <div class="Detail" >
                       <el-form
                         ref="ruleForm"
                         label-width="100px"
@@ -117,7 +119,6 @@
                             </el-form-item></el-col
                           >
                         </el-row>
-
                         <el-form-item label="创建时间">
                           <el-col :span="11">
                             <el-form-item>
@@ -385,6 +386,15 @@ export default {
           this.update_date = res.data.issue[0].updateDate;
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
+          if(res.data.issue[0].level==1){
+            res.data.issue[0].level="低";
+          }else if(res.data.issue[0].level==2){
+            res.data.issue[0].level="一般";
+          }else if(res.data.issue[0].level==3){
+            res.data.issue[0].level="较高";
+          }else if(res.data.issue[0].level==4){
+            res.data.issue[0].level="最高";
+          }
           this.level = res.data.issue[0].level;
           this.modifyA = res.data.issue[0].solution;
           this.getData(this.currentPage);
