@@ -39,8 +39,16 @@
               <el-table-column
                 prop="status"
                 label="Issue 状态"
-                
+                show-overflow-tooltip
+                :filters="[{ text: '待修改', value: '待修改' }, { text: '待验证', value: '待验证' }, { text: '关闭', value: '关闭' }]"
+                :filter-method="filterTag"
+                filter-placement="bottom-end"
               >
+              <template slot-scope="scope">
+                <el-tag
+                  :type="scope.row.status === '待修改' ? 'primary' : (scope.row.status === '待验证' ? 'danger':'success') "
+                  disable-transitions>{{scope.row.status}}</el-tag>
+              </template>
               </el-table-column>
               <el-table-column
                 prop="planDate"
@@ -194,6 +202,7 @@
                         scope.row.issueId
                       )
                     "
+                    v-if="scope.row.status!=='关闭'"
                     >修改</el-button
                   >
                 </template>
@@ -292,7 +301,7 @@ export default {
       console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@UPUPUP"+this.userName);
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://192.168.1.57:8999/searchIssue",
         data:{
           userId:null,
           issueId:0,
@@ -362,7 +371,7 @@ export default {
       console.log("+++++++++++++++++++++"+n)
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://192.168.1.57:8999/searchIssue",
         data:{
           issueId: n,
           status:null,
@@ -402,6 +411,10 @@ export default {
         .catch((err) => {
           console.log("error...", err);
         });
+    },
+    //标签
+    filterTag(value, row) {
+        return row.status === value;
     },
     //隐藏
     childByValue(show){

@@ -14,11 +14,6 @@
               style="width: 100%"
               @selection-change="handleSelectionChange"
             >
-            <!-- .slice(
-                  (currentPage - 1) * PageSize,
-                  currentPage * PageSize
-                ) -->
-              <!-- :row-class-name="tableRowClassName" -->
               <!-- 表格内容 -->
               <el-table-column type="selection"> </el-table-column>
               <el-table-column type="index" :index="indexMethod" label="序号">
@@ -341,7 +336,7 @@ export default {
       this.search.date4=this.ruleForm.date4,
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://192.168.1.57:8999/searchIssue",
         data:{
           userId:null,
           issueId:this.ruleForm.issueId,
@@ -372,23 +367,16 @@ export default {
 
     getDataA(n1,n2) {
       console.log("N4@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
-      // if(this.search.issueId===undefined){
-      //   this.search.issueId=0;
-      // }
-      // console.log("N1@@@@@@@@@@@@@@@@@@@@----"+n1);
-      // console.log("N2@@@@@@@@@@@@@@@@@@@@@@@@@----"+n2);
       if(n1==undefined){
           n1=20;
       }
       if(n2==undefined){
           n2=1
       }
-      // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.issueObj.createMan);
-      // console.log("N3@@@@@@@@@@@@@@@@@@@@@@@@@----"+this.search.issueId);
 
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://192.168.1.57:8999/searchIssue",
         data:{
           userId:null,
           issueId:this.search.issueId,
@@ -460,7 +448,7 @@ export default {
       this.dialogTableVisible = true;
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssue",
+        url: "http://192.168.1.57:8999/searchIssue",
         data:{
             
           issueId: n,

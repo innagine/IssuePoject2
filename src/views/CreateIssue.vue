@@ -11,27 +11,32 @@
       <el-row>
         <el-col :span="12"
           ><el-form-item label="Issue题目" prop="name">
-            <el-input v-model="ruleForm.name"></el-input> </el-form-item
+            <el-input v-model="ruleForm.name" maxlength="80"
+              show-word-limit></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
           <el-form-item label="Issue No." prop="id" >
-            <el-input v-model="ruleForm.id" :disabled="true"></el-input> </el-form-item
+            <el-input v-model="ruleForm.id" :disabled="true" maxlength="30"
+              show-word-limit></el-input> </el-form-item
         ></el-col>
       </el-row>
       <el-row>
         <el-col :span="12"
           ><el-form-item label="指派人" prop="person">
-            <el-input v-model="ruleForm.person"></el-input> </el-form-item
+            <el-input v-model="ruleForm.person" maxlength="30"
+              show-word-limit></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
           <el-form-item label="影响版本" prop="version" :inline="true" v-model="ruleForm.version">
-            <el-input v-model="ruleForm.version"></el-input> </el-form-item
+            <el-input v-model="ruleForm.version" maxlength="30"
+              show-word-limit></el-input> </el-form-item
         ></el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="ISSUE类型" prop="type2">
-            <el-input v-model="ruleForm.type2"></el-input> </el-form-item
+            <el-input v-model="ruleForm.type2" maxlength="30"
+              show-word-limit></el-input> </el-form-item
         ></el-col>
       </el-row>
 
@@ -75,7 +80,8 @@
         </el-col>
       </el-form-item>
       <el-form-item label="步骤重现" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        <el-input type="textarea" v-model="ruleForm.desc" maxlength="2000"
+              show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="Issue等级" prop="grade">
         <el-select v-model="ruleForm.grade" placeholder="请选择Issue等级">
@@ -185,7 +191,7 @@ export default {
       // 发送post请求
           axios({
         method: "post",
-        url: "http://localhost:8999/createIssue",
+        url: "http://192.168.1.57:8999/createIssue",
         data: {
           issueName:this.ruleForm.name,
           createMan:this.User.userName,

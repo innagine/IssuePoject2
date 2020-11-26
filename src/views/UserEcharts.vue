@@ -12,61 +12,7 @@ import echarts from "echarts";
 export default {
   name: "UserEcharts",
   props: ["User"],
-  //   created() {
-  //     axios({
-  //       method: "post",
-  //       url: "http://localhost:8999/searchIssue",
-  //       data: {
-  //         userId: this.User.userId,
-  //         issueId: 0,
-  //         status: null,
-  //         createMan: null,
-  //         updateMan: null,
-  //         createDate: null,
-  //         updateDate: null,
-  //         date2: null,
-  //         date4: null,
-  //         pageIndex: 1,
-  //         pageSize: 20,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         // console.log(data);
-  //         // 将数据赋值给tableData
-  //         // res.data.issue[i].status
-  //         this.userlist=res.data;
-  //         this.taskList=this.userlist.issue;
-  //         console.log(this.userlist);
-  //         console.log(this.taskList);
-  //         console.log(this.i);
-  //         for(;this.i<this.userlist.total;this.i++){
-  //             if(res.data.issue[this.i].status=="已完成"){
-  //                 this.finish++
 
-  //             }
-  //             if(res.data.issue[this.i].status=="待修改"){
-  //                 this.unfinish++
-
-  //             }
-  //             if(res.data.issue[this.i].status=="待验证"){
-  //                 this.check++
-  //             }
-
-  //         }
-  //         console.log(this.unfinish)
-  //         console.log(this.finish)
-  //         console.log(this.check)
-
-  //         // 将数据的长度赋值给totalCount
-
-  //         // console.log(this.tableData);
-  //         // console.log(this.totalCount);
-
-  //       })
-  //       .catch((err) => {
-  //         console.log("error...", err);
-  //       });
-  //   },
 
   data() {
     return {
@@ -140,7 +86,7 @@ title: {
 
       axios({
         method: "post",
-        url: "http://localhost:8999/searchUser",
+        url: "http://192.168.1.57:8999/searchUser",
         data: {
           userId: null,
           userName:null,

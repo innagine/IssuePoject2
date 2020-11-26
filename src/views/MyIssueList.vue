@@ -62,7 +62,7 @@
                 show-overflow-tooltip
               >
               </el-table-column>
-              <el-table-column label="操作" width="210px">
+              <el-table-column label="操作" width="220px">
                 <template slot-scope="scope">
                 <!-- style="background-color: #a6a9ad !important" -->
                 <!--style="background-color: #a6a9ad !important"--->               

@@ -51,7 +51,7 @@ export default {
             pageSize:'20',    // 页长
 
             // 获取userList的url
-            url:'http://localhost:8999/searchIssueByuser',
+            url:'http://192.168.1.57:8999/searchIssueByuser',
 
             // 用于存储一页数据的数组
             userList:[], 
@@ -74,7 +74,7 @@ export default {
       handleUserList(){         
         axios({                   // 发送ajax请求数据
           method:'post',
-          url:'http://localhost:8999/searchIssueByuser',
+          url:'http://192.168.1.57:8999/searchIssueByuser',
           data:{
             userId:this.userId,
             userName:this.userName,

@@ -154,7 +154,7 @@ export default {
         if (valid) {
           axios({
             method: "post",
-            url: "http://localhost:8999/updateUser",
+            url: "http://192.168.1.57:8999/updateUser",
             data: {
               userId:this.User.userId,
               userName:this.ruleForm.userName,

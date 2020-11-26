@@ -226,7 +226,7 @@ export default {
       // axios post请求
       axios({
         method: "post",
-        url: "http://localhost:8999/searchUser",
+        url: "http://192.168.1.57:8999/searchUser",
         data: this.FormJsons,
       })
         .then((...res) => {
@@ -254,7 +254,7 @@ export default {
       console.log("&&&&&&&&&&&&"+this.Paging.pageIndex);
       axios({
         method: "post",
-        url: "http://localhost:8999/searchUser",
+        url: "http://192.168.1.57:8999/searchUser",
         data:this.Paging,
       })
         .then((...res) => {
@@ -308,7 +308,7 @@ export default {
     handleEdit(row) {
       axios({
         method: "post",
-        url: "http://localhost:8999/UpdateAuthority",
+        url: "http://192.168.1.57:8999/UpdateAuthority",
         data: {userId:row.userId}
       })
         .then((res) => {
@@ -345,7 +345,7 @@ export default {
     handleDelete(row) {
       axios({
         method: "post",
-        url: "http://localhost:8999/cancellationUser",
+        url: "http://192.168.1.57:8999/cancellationUser",
         data: {userId:row.userId}
       })
         .then((res) => {

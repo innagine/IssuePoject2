@@ -162,7 +162,7 @@ export default {
 
       axios({
         method: "post",
-        url: "http://localhost:8999/searchIssueByuser",
+        url: "http://192.168.1.57:8999/searchIssueByuser",
         data: {
           userId: this.User.userId,
           userName:this.User.userName,

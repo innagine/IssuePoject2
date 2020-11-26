@@ -59,7 +59,7 @@ export default {
         if (valid) {
           axios({
             method: "post",
-            url: "http://localhost:8999/updateSolotion",
+            url: "http://192.168.1.57:8999/updateSolotion",
             data: {solution :this.ruleForm.desc,issueId:this.modifyId},
       })
         .then((res) => {
