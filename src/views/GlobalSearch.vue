@@ -80,6 +80,8 @@
                   <el-dialog
                     title="ISSUE详情"
                     :visible.sync="dialogTableVisible"
+                    destroy-on-close
+                    v-if="dialogTableVisible"
                   >
                     <div class="Detail">
                       <el-form
