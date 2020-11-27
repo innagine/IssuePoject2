@@ -191,6 +191,7 @@
                           >
                         </el-form-item>
                       </el-form>
+                      <IMG2 :ISSUEID="IMG"></IMG2>
                     </div>
                   </el-dialog>
                 </template>
@@ -220,6 +221,7 @@
 <script>
 import axios from "axios";
 import IssueModify from "@/views/IssueModify.vue";
+import IMG2 from '@/components/IMG2';
 
 
 //表格
@@ -228,11 +230,13 @@ export default {
 
   name: "issuelist",
   components: {
-    IssueModify
+    IssueModify,
+    IMG2
   },
   
   data() {
     return {
+      IMG:'',
       //搜索数据
       form: {
         user_id: "",
@@ -438,6 +442,7 @@ export default {
     },
     //取详情按钮的数据index, row
     handleDelete(n) {
+      this.IMG=n;
       console.log(n);
       this.getTagDetail(n);
     // console.log("++++++++++++++++++++++++++++++++++++++++++++++"+this.issueObj.issueId);
@@ -445,6 +450,7 @@ export default {
     },
     //弹窗
     getTagDetail(n) {
+      
       this.dialogTableVisible = true;
       axios({
         method: "post",

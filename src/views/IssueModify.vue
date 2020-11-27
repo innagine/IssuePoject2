@@ -17,6 +17,7 @@
           >
           <el-button @click="resetForm('ruleForm')">重置</el-button>
           <el-button @click="back()">返回</el-button>
+          <Upload :ISSUEID="modifyId"></Upload>
         </el-form-item>
       </el-form>
     </div>
@@ -27,9 +28,12 @@
 <script>
 // import IssueList from "@/views/IssueList.vue";
 import axios from "axios";
+import Upload from '@/components/Upload';
 
 export default {
-  
+  components:{
+    Upload
+  },
   props: ['modifyId'],
   data() {
     return {
