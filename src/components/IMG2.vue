@@ -15,7 +15,6 @@ props:['ISSUEID'],
 name:'IMG2',
 created() {
     // 发送post请求，请求注册
-     console.log("QQQQQQQQQQQQQQ"+this.ISSUEID)
       axios({
         method: "post",
         url: "http://localhost:8999/downloadImage",
