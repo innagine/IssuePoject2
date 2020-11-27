@@ -400,7 +400,7 @@ export default {
           this.create_man = res.data.issue[0].createMan;
           this.beta = res.data.issue[0].beta;
           this.create_date = res.data.issue[0].createDate;
-          this.update_date = res.data.issue[0].updateDate;
+          this.update_date = res.data.issue[0].planDate;
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
           if(res.data.issue[0].level==1){

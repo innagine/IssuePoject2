@@ -338,9 +338,6 @@ export default {
           // 将数据赋值给tableData
           this.tableData = res.data.issue;
           // console.log(res.data.issue);
-          // 将数据的长度赋值给totalCount
-          // d.setDate(d.getDate()+days);
-          // console.log("999999"+this.tableData[0].planDate.setDate(this.tableData[0].planDate.getDate()+2));
           this.totalCount = res.data.total; 
           // console.log("(((((((((((("+res.data.total);
           this.currentPage=index;
@@ -490,7 +487,7 @@ export default {
           this.create_man = res.data.issue[0].createMan;
           this.beta = res.data.issue[0].beta;
           this.create_date = res.data.issue[0].createDate;
-          this.update_date = res.data.issue[0].updateDate;
+          this.update_date = res.data.issue[0].planDate;
           this.final_date = res.data.issue[0].finalDate;
           this.step = res.data.issue[0].step;
           if(res.data.issue[0].level==1){

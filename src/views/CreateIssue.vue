@@ -112,7 +112,7 @@ export default {
     return {
        pickerOptions: {
           disabledDate(time) {
-            return time.getTime() < Date.now();
+            return time.getTime() <= Date.now();
           },
       },
 
@@ -144,7 +144,7 @@ export default {
         ],
         name: [
           { required: true, message: "请输入ISSUE题目", trigger: "blur" },
-          { min: 8, max: 80, message: "长度在 8 到 80 个字符", trigger: "blur" },
+          { max: 80, message: "长度最多 80 个字符", trigger: "blur" },
         ],
         region: [
           { required: true, message: "请填写步骤重现", trigger: "change" },
