@@ -90,7 +90,7 @@ export default {
 
 
       list: [],
-      url: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+      url: "",
       name: "",
       role: "",
       input: "",
@@ -345,6 +345,7 @@ export default {
       // 如果是员工
       if (this.role =="普通用户") {
         console.log("普通用户");
+        this.url="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3169323500,1174955540&fm=26&gp=0.jpg"
         this.indexlisyt[0].index=true;
         this.indexlisyt[3].index=true;
         return 1;
@@ -352,12 +353,14 @@ export default {
       // 如果是经理
       if (this.role =="经理") {
         console.log("这是经理");
+        this.url="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
         this.indexlisyt[1].index=true;
         this.indexlisyt[3].index=true;
         return 2;
       }
       // 如果是超级管理员
       if (this.role =="超级Admin") {
+        this.url="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2464832200,2600931590&fm=26&gp=0.jpg"
         console.log("这是管理员");
         this.indexlisyt[2].index=true;
         return 3;

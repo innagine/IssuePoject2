@@ -1,7 +1,7 @@
 <template>
-  <el-carousel :interval="5000" arrow="always" height="500px">
+  <el-carousel :interval="5000" arrow="always" height="600px">
     <el-carousel-item v-for="(item,index) in list" :key="index">
-      <img :src="item.URl" />
+      <img :src="item.URl" class="IMG" />
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -15,10 +15,10 @@ export default {
   data() {
     return {
       list: [
-          {"URl":require("../assets/nebula-10-1530144_1920.png")},
-          {"URl":require("../assets/planet-581239.jpg")},
-          {"URl":require("../assets/space-1451654.png")},
-          {"URl":require("../assets/wallpaper-1531107_1920.jpg")},
+          {"URl":require("../assets/ISSUE2.jpg")},
+          {"URl":require("../assets/ISSUE3.jpg")},
+          {"URl":require("../assets/ISSUE2.jpg")},
+          {"URl":require("../assets/ISSUE1.png")},
       ],
     };
   },
@@ -38,10 +38,16 @@ export default {
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #6fb7ff;
+  background-color: #fff;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #409EFF;
+  background-color: #fff
+}
+.IMG{
+  display: block;
+  margin: 0 auto;
+  max-height: 100%;
+    width: auto;
 }
 </style>
